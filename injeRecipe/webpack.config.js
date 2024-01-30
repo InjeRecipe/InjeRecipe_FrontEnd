@@ -1,6 +1,6 @@
 const path = require('path')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
-
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, './public/index.html'),
@@ -15,7 +15,7 @@ module.exports = {
     path: path.join(__dirname, '/build'),
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js' ,'.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
       'react-native$': 'react-native-web',
     },
@@ -23,28 +23,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(t|j)sx?$/,
         exclude: /node_modules\/(?!()\/).*/,
-        
         use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-react", "@babel/preset-env"],
-          },
-        },
-       
-      },
-      {
-        test: /\.ts(x)?$/,
-        
-        use: {
-          loader: 'ts-loader',
-    
+          loader: 'babel-loader',
         },
       },
     ],
   },
-  plugins: [HTMLWebpackPluginConfig],
+
+  plugins: [HTMLWebpackPluginConfig,new ForkTsCheckerWebpackPlugin()],
   devServer: {
     open: true,
     port:3000,

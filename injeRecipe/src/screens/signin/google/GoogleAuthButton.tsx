@@ -4,14 +4,8 @@ import {
   } from '@react-native-google-signin/google-signin'
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
-    Platform,
   Pressable,
-  SafeAreaView,
-  StyleSheet,
   Text,
-  View,
- 
 } from 'react-native';
 
 export function GoogleAuthButton(){
@@ -19,7 +13,7 @@ export function GoogleAuthButton(){
     GoogleSignin.configure({
     webClientId:'1061735857952-hfskjefce69p4msarih2vr714kto3res.apps.googleusercontent.com',
     iosClientId:'1061735857952-hfskjefce69p4msarih2vr714kto3res.apps.googleusercontent.com', //파이어베이스 서버 이용을 안할경우 필요한듯
-    offlineAccess:true,
+    
     });
     
   };
@@ -63,7 +57,7 @@ export function GoogleAuthButton(){
 
 
   return (
-  <Pressable onPress={_signIn}>
+  <Pressable onPress={()=>{}}>
     <Text>Google</Text>
     </Pressable>
 
