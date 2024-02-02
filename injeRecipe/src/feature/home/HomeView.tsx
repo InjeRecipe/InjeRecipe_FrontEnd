@@ -1,13 +1,16 @@
 import LottieView from "lottie-react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { GoogleAuthButton } from "../../screens/signin/google/GoogleAuthButton";
 import { useRootNavigation } from "../../navigations/RootStackNavigation";
-import { LoginButton } from "../main/LoginButton";
+import { LoginButton } from "./LoginButton";
 import { Margin } from "../../component/Margin";
+import { SignUpButton } from "./SignUpButton";
+import { LoginAimButton } from "./LoginAimButton";
 
 export function HomeView() {
     const navigation = useRootNavigation()
+    const [LoginIsExpanded,setLoginIsExpanded] = useState(false)
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -23,7 +26,16 @@ export function HomeView() {
             width:"100%",
             alignContent: 'center',
             justifyContent: 'center',
-            alignItems:"center"
+            alignItems:"center",
+            
+        },
+        buttonStyle:{
+            width:"75%",
+            borderWidth:1,
+            alignItems:"center",
+            justifyContent:"center",
+            height:50,
+            borderRadius:18
         }
     })
     const onPressLogin = () =>{
@@ -46,17 +58,21 @@ export function HomeView() {
                     style={{ width: "100%", height: "90%", marginTop: -50 }}
                     autoPlay
                     loop/>
+                    <Pressable onPress={onPressLogin} 
+                style={{borderWidth:1,alignItems:"center"}}>
+                    <Text style={{fontSize:18}}>화면전환용 로그인</Text>
+                </Pressable> 
             </View>
             <View style={styles.buttonSection}>
                 {/* button section */}
                 {/* 구글 로그인 로그인 등 컴포넌트화 시키기 */}
-                <GoogleAuthButton />
-                <Pressable onPress={onPressLogin}>
-                    <Text>로그인</Text>
-                </Pressable> 
-                <LoginButton text={"구글 계정을 통한 로그인"}/>
+                {/* <GoogleAuthButton /> */}
+                <Margin height={30}/>
+                <SignUpButton LoginIsExpanded={LoginIsExpanded}/>
                 <Margin height={10}/>
-                <LoginButton text={"로그인"}/>
+                <LoginAimButton 
+                    LoginIsExpanded ={LoginIsExpanded}
+                    setLoginIsExpanded={setLoginIsExpanded}/>
             </View>
         </SafeAreaView>
     )
