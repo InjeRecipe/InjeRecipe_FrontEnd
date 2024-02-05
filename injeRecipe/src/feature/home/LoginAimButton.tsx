@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
 import { LoginButton } from "./LoginButton";
 import { Margin } from "../../component/Margin";
+import { COLORS } from "../../color/Colors";
 export function LoginAimButton({ LoginIsExpanded, setLoginIsExpanded }: any) {
     const interpolate = useRef(new Animated.Value(0)).current
     const onPressClick = () => {
@@ -44,16 +45,18 @@ export function LoginAimButton({ LoginIsExpanded, setLoginIsExpanded }: any) {
                             justifyContent: "center",
                             borderRadius: 18,
                             height: 50,
-                            borderWidth: 1
+                            backgroundColor:COLORS.BUTTON_SIGNIN
                         }}
                         onPress={onPressClick} >
-                        <Text style={{ fontSize: 22 }}>로그인</Text>
+                        <Text style={{
+                             fontSize: 22,
+                             color:"#FFFFFF" }}>로그인</Text>
                     </Pressable>}
                 {LoginIsExpanded ?
                     <>
-                        <LoginButton text={"로그인"} />
+                        <LoginButton text={"로그인"} value={"signin"} />
                         <Margin height={10} />
-                        <LoginButton text={"구글 계정을 통한 로그인"} />
+                        <LoginButton text={"구글 계정을 통한 로그인"} value={"google"} />
                     </> : null
                 }
                 <Margin height={10}/>

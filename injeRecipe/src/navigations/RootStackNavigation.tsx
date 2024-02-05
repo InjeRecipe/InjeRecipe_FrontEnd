@@ -1,13 +1,11 @@
 import React from "react"
 import { NativeStackNavigationProp, createNativeStackNavigator } from "@react-navigation/native-stack"
-import { RootStackParamList } from "../@types/screen"
 import { HomeScreen } from "../screens/home/HomeScreen"
 import BottomNavigator from "./BottomNavigator"
-import { useNavigation } from "@react-navigation/native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
+import HomeStackNavigator from "./HomeNavigator"
 
-const Stack = createNativeStackNavigator<RootStackParamList>()
-export default function RootStackScreen () {
+const Stack = createNativeStackNavigator()
+export default function RootStackNavigation () {
     return(
         <Stack.Navigator
             initialRouteName="Home"
@@ -15,11 +13,9 @@ export default function RootStackScreen () {
                 headerShown:false
             }}>
             <Stack.Screen name="Home" component={HomeScreen}/>
+            <Stack.Screen name="HomeStack" component={HomeStackNavigator}/>
             <Stack.Screen name="Bottom" component={BottomNavigator}/>
         </Stack.Navigator>
     )
 }
 
-export const useRootNavigation = <RouteName extends keyof RootStackParamList> () => {
-     return useNavigation<NativeStackNavigationProp<RootStackParamList,RouteName>>()
-}

@@ -1,21 +1,23 @@
 import LottieView from "lottie-react-native";
 import React, { useState } from "react";
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { GoogleAuthButton } from "../../screens/signin/google/GoogleAuthButton";
-import { useRootNavigation } from "../../navigations/RootStackNavigation";
-import { LoginButton } from "./LoginButton";
+import { GoogleAuthButton } from "../../screens/home/signin/google/GoogleAuthButton";
+
+
 import { Margin } from "../../component/Margin";
 import { SignUpButton } from "./SignUpButton";
 import { LoginAimButton } from "./LoginAimButton";
+import { useNavigation } from "@react-navigation/native";
 
 export function HomeView() {
-    const navigation = useRootNavigation()
+    const navigation = useNavigation<any>()
     const [LoginIsExpanded,setLoginIsExpanded] = useState(false)
     const styles = StyleSheet.create({
         container: {
             flex: 1,
         },
         header: {
+            
             flex: 0.25,
             alignContent: 'center',
             justifyContent: 'center',

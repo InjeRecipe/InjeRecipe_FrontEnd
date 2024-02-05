@@ -1,6 +1,7 @@
-export type RootStackParamList = {
-    Home:undefined,
-    Bottom:undefined
+export const RootStackParamList = {
+    Home:"Home",
+    Bottom:"Bottom",
+    HomeStack:"HomeStackNavigator"
 }
 
 export type BottomStackParamList = {
@@ -8,4 +9,9 @@ export type BottomStackParamList = {
     Refrigator:undefined,
     Search:undefined,
     Info:undefined
+}
+
+export const HomeStackParamList = {
+    SignIn:"SignIn",
+    SignUp:undefined
 }

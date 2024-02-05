@@ -1,13 +1,14 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { COLORS } from "../../color/Colors";
-import { useNavigation } from "@react-navigation/native";
 
-export function SignUpButton({LoginIsExpanded}:any){
+import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "../color/Colors";
+
+export function SubmitButton({LoginIsExpanded}:any){
     const navigation = useNavigation<any>()
     const onPressSignUp = () => {
         
-        navigation.navigate('HomeStack',{screen:'SignUp'})
+        navigation.navigate('HomeStack',{screen:'SignIn'})
     }
     return(
         <>
@@ -22,7 +23,7 @@ export function SignUpButton({LoginIsExpanded}:any){
         }}
         onPress={onPressSignUp}>
             
-            <Text style={{ fontSize: 22, color: "#FFFFFF" }}>회원가입</Text>
+            <Text style={{ fontSize: 22, color: "#FFFFFF" }}>완료</Text>
             
             
         </Pressable>}

@@ -17,19 +17,20 @@ import {
 } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
   
-import { GoogleAuthButton } from './src/screens/signin/google/GoogleAuthButton';
+import { GoogleAuthButton } from './src/screens/home/signin/google/GoogleAuthButton';
 import { LocationTestButton } from './src/Location/LocationTestButton';
 import { HomeScreen } from './src/screens/home/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import RootStackScreen from './src/navigations/RootStackNavigation';
+import RootStackNavigation from './src/navigations/RootStackNavigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import HomeStackScreen from './src/navigations/HomeNavigator';
 
 function App(){
  
   return (
     <SafeAreaProvider>
     <NavigationContainer>
-      <RootStackScreen/>
+      <RootStackNavigation/>
     </NavigationContainer>
     </SafeAreaProvider>
   );
