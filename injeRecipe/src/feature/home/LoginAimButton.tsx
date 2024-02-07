@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
 import { LoginButton } from "./LoginButton";
 import { Margin } from "../../component/Margin";
-import { COLORS } from "../../color/Colors";
+
 export function LoginAimButton({ LoginIsExpanded, setLoginIsExpanded }: any) {
     const interpolate = useRef(new Animated.Value(0)).current
     const onPressClick = () => {
@@ -45,7 +45,7 @@ export function LoginAimButton({ LoginIsExpanded, setLoginIsExpanded }: any) {
                             justifyContent: "center",
                             borderRadius: 18,
                             height: 50,
-                            backgroundColor:COLORS.BUTTON_SIGNIN
+                            backgroundColor:"#A25426"
                         }}
                         onPress={onPressClick} >
                         <Text style={{
