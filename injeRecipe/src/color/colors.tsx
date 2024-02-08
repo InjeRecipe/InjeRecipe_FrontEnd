@@ -1,4 +1,4 @@
-export const COLORS ={
+export const Colors ={
      BUTTON_SIGNIN : "#A25426",
      BUTTON_SIGNUP : "#323232",
      FONT_WHITE: "#FFFFFF",
