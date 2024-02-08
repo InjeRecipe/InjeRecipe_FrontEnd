@@ -1,8 +1,9 @@
 import React from "react"
 import { Pressable, Text, View } from "react-native"
 import { useDimention } from "../hooks/useDimension"
-import { COLORS } from "../color/Colors"
+
 import { useNavigation } from "@react-navigation/native"
+
 
 type props = {
     title:string,
@@ -27,7 +28,7 @@ export const HeaderSign = ({
     return(
         <View style={{
             borderBottomWidth:0.3,
-            borderColor:COLORS.SEPARATED_LINE,
+            borderColor:'gray',
             alignItems:"center",
             justifyContent:"center",
             height:height*0.08,

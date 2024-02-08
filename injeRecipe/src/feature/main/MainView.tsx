@@ -1,51 +1,41 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { WeatherCard } from "../weather/WeatherCard";
 import { Header } from "../../component/Header";
 import { Margin } from "../../component/Margin";
+import { Colors } from "../../color/Colors";
+import { useDimention } from "../../hooks/useDimension";
 
 export function MainView(){
+    const {getHeight } = useDimention()
+    const height = getHeight()
     return(
-        <View style={{flex:1}}> 
-            <Header/>
-            <Margin height={10}/>
-            <Text>
+        <SafeAreaView style={{flex:1,backgroundColor:'white'}}> 
+            <View style={{flex:0.1}}>
+                {/* Header */}
+                <Header/>
+            </View>
+            <ScrollView style={{flex:1,}}>
+            <View style={{flex:0.5,borderColor:'blue'}}>
+                {/* recomend Ai Recipe */}
+                <View style={{flex:0.1,paddingHorizontal:10}}>
+                    <Text style={{marginTop:5,fontWeight:'bold',fontSize:20}}>추천 레시피</Text>
+                </View>
+                <View style={{flex:0.9}}>
+                <WeatherCard height={height}/>
+                </View>
+            </View>
+            <View style={{flex:0.45,borderWidth:1}}>
+                {/* popular recipe */}
+                <View style={{flex:0.1,paddingHorizontal:10}}>
+                    <Text style={{marginTop:5,fontWeight:'bold',fontSize:20}}>인기 레시피</Text>
+                </View>
+                <View style={{flex:0.9}}>
+                
+                </View>
+            </View>
+            </ScrollView>
             
-
-            </Text>
-            <WeatherCard/>
-            <Margin height={15}/>
-            {/* 
-            음식 이미지 발표 준비용 샘플
-            <View style={{flexDirection:"row"}}>
-            <View style={{
-                borderWidth:1,
-                height:200,
-                width:150,
-                marginLeft:10,
-                borderRadius:5}}>
-                <Text>item1</Text>
-                <Image style={{flex:1}} source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/testDishImage.jpeg'}}/>
-            </View>
-            <View style={{
-                borderWidth:1,
-                height:200,
-                width:150,
-                marginLeft:10,
-                borderRadius:5}}>
-                <Text>item2</Text>
-                <Image style={{flex:1}} source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/testDishImage2.jpeg'}}/>
-            </View>
-            <View style={{
-                borderWidth:1,
-                height:200,
-                width:150,
-                marginLeft:10,
-                borderRadius:5}}>
-                <Text>item3</Text>
-                <Image style={{flex:1}} source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/testDishImage3.jpeg'}}/>
-            </View>
-            </View> */}
-        </View>
+        </SafeAreaView>
     )
 }

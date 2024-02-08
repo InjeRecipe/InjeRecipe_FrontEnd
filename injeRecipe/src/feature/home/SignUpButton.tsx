@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { COLORS } from "../../color/Colors";
+
 import { useNavigation } from "@react-navigation/native";
 
 export function SignUpButton({LoginIsExpanded}:any){
@@ -18,7 +18,7 @@ export function SignUpButton({LoginIsExpanded}:any){
             justifyContent:"center",
             borderRadius:18,
             height:50,
-            backgroundColor:COLORS.BUTTON_SIGNUP
+            backgroundColor:"#323232"
         }}
         onPress={onPressSignUp}>
             
