@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { WeatherCard } from "../weather/WeatherCard";
+import { WeatherCard } from "./weather/WeatherCard";
 import { Header } from "../../component/Header";
 import { Margin } from "../../component/Margin";
 import { Colors } from "../../color/Colors";

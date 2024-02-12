@@ -20,6 +20,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@tsconfig/react-native": "^3.0.3",
+    "axios": "^1.6.7",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "lottie-react-native": "^6.5.1",
     "react": "18.2.0",
