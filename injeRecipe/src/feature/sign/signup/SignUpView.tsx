@@ -6,6 +6,7 @@ import { Margin } from "../../../component/Margin";
 import { SignUpButton } from "../../home/SignUpButton";
 import { InputBox } from "../../../component/InputBox";
 import { SubmitButton } from "../../../component/SubmitButton";
+import { ProfileImage } from "./ProfileImage";
 
 
 export function SignUpView(){
@@ -13,8 +14,11 @@ export function SignUpView(){
     const [pw,setPw] = useState('')
     const [name,setName] = useState('')
     const [nickName,setNickName] = useState('')
+    const [image,setImage] =useState('')
     return(
         <View style={{flex:1,alignItems:"center"}}>
+            <Margin height={50}/>
+            <ProfileImage setImage={setImage}/>
             <Margin height={50}/>
             <InputBox title="아이디" value={id} setValue={setId}/>  
             <Margin height={8}/>

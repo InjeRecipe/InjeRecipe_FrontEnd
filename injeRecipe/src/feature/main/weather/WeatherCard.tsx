@@ -26,9 +26,11 @@ export function WeatherCard({ height }: any) {
         console.log('???')
         type data ={lat:string,lon:string}
          const postData:data = {
-            lat:location.coords.latitude,
-            lon:location.coords.longitude
+            lat:location.coords.latitude+"",
+            lon:location.coords.longitude+""
         }
+        console.log(typeof postData.lat)
+        console.log(typeof postData.lon)
         POST_WEATHER(postData)
     }
    },[location])

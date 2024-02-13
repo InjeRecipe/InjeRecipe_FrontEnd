@@ -21,8 +21,7 @@ export function RefrigatorAiButton(){
                 justifyContent:"center",
                 backgroundColor:Colors.REFRIGATOR_AI_BUTTON
             }}
-            onPress={onPressRecommendButton}
-            >
+            onPress={onPressRecommendButton}>
                 <Text style={{color:Colors.FONT_WHITE,fontSize:20}}>추천받기</Text>
             </Pressable>
         </View>
