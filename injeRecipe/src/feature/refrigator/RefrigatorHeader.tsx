@@ -3,8 +3,6 @@ import { Pressable, Text, View } from "react-native";
 import { Colors } from "../../color/Colors";
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/core";
-import { AddItemModalView } from "./AddItemModalView";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
 type props = {
     id:string,
     func:()=>void}

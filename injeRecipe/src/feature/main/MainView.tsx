@@ -9,6 +9,7 @@ import { useDimention } from "../../hooks/useDimension";
 export function MainView(){
     const {getHeight } = useDimention()
     const height = getHeight()
+    
     return(
         <SafeAreaView style={{flex:1,backgroundColor:'white'}}> 
             <View style={{flex:0.1}}>

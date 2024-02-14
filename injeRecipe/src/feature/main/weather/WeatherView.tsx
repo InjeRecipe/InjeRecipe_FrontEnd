@@ -3,6 +3,7 @@ import LottieView from "lottie-react-native"
 import { Image, Text, View } from "react-native"
 
 export const WeahterView = ({weather}:any) => {
+    
     const weatherMessage = {
         snow:'눈이 오는데 \n 다음과 같은 레시피는 어때요?',
         cloud:'날이 흐린데 \n 다음과 같은 레시피는 어때요?',
@@ -26,7 +27,7 @@ export const WeahterView = ({weather}:any) => {
     const [aiMessage,setAiMessage] = useState<string>('')
 
     useEffect(()=>{
-        if(weather=="cloud"){
+        if(weather=="Clouds"){
             setAiMessage(weatherMessage.cloud)
             setBgColor(weatherdBackColor.cloud)
             setImageUri(weahterBackground.cloud)

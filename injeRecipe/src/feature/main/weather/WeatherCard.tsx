@@ -11,6 +11,8 @@ export function WeatherCard({ height }: any) {
     const {POST_WEATHER} = weatherService()
     const {GET_RECIPE} =chatGptService()
     const [location,setLocation] = useState<any>()
+    const [weather, setWeather] = useState<any>()
+
     const getNowLocation = ()=> {
         Geolocation.getCurrentPosition(data => {
             setLocation(data)
@@ -23,7 +25,6 @@ export function WeatherCard({ height }: any) {
    useMemo(()=>{
     console.log('Memo',location)
     if(location){
-        console.log('???')
         type data ={lat:string,lon:string}
          const postData:data = {
             lat:location.coords.latitude+"",
@@ -31,13 +32,17 @@ export function WeatherCard({ height }: any) {
         }
         console.log(typeof postData.lat)
         console.log(typeof postData.lon)
-        POST_WEATHER(postData)
+        POST_WEATHER(postData).then((res)=>{
+            console.log('POSTWEATHER',res.weather[0].main)
+            setWeather(res.weather[0].main)
+        })
     }
    },[location])
-    const [weather, setWeather] = useState('snow')
-    
-       
-    
+
+   useMemo(()=>{
+        console.log(weather)
+   },[weather])
+ 
     return (
         <View style={{
             height: height * 0.5,

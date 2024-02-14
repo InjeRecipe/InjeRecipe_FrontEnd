@@ -3,25 +3,32 @@ import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { RefrigatorHeader } from "./RefrigatorHeader";
 import { RefrigatorAiButton } from "./RefrigatorAiButton";
 import { RefrigatorItemView } from "./RefrigatorItemView";
-import { AddItemModalView } from "./AddItemModalView";
+
 import BottomSheet,{
+    BottomSheetFlatList,
     BottomSheetModal,
     BottomSheetModalProvider,
+    BottomSheetScrollView,
   } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useRefrigator } from "../../hooks/useRefrigator";
+import { AddItemView } from "./AddItemView";
+import { Colors } from "../../color/Colors";
   
 export function RefrigatorView(){
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const snapPoints = useMemo(() => ['1%', '80%'], []);
-    const [isExpanded,setIsExpanded] = useState(false)
+    const snapPoints = useMemo(() => ['10%', '90%'], []);
+    const [isExpanded,setIsExpanded] = useState(true)
+    const {foods} =useRefrigator()
     // variables
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
       }, []);
       const handlePresentModalPress = () => {
-        console.log('???',isExpanded)
-        if(isExpanded){bottomSheetModalRef.current?.expand()}
+        
+        if(isExpanded){bottomSheetModalRef.current?.snapToIndex(1)}
         else {bottomSheetModalRef.current?.close()}
+        console.log(isExpanded)
         setIsExpanded(!isExpanded)
         
       };
@@ -47,11 +54,49 @@ export function RefrigatorView(){
                 </View>
                 
             </View>
-            <View style={{position:'absolute',backgroundColor:'#00000070',width:1000,height:1000,}}>
+            {isExpanded?null:<View style={{position:'absolute',backgroundColor:'#00000070',width:1000,height:1000,}}/>}
             {/* 필름뷰 트리거 달아주기 */}
-            </View>
+            
         </SafeAreaView>
         
+        )
+    }
+    const ListHeaderComponent = () =>{
+        return(
+            <View style={{
+                borderColor:Colors.SEPARATED_LINE,
+                borderBottomWidth:1,
+                height:65,
+                justifyContent:"center",
+                paddingHorizontal:10}}>
+                <Text style={{fontSize:22,fontWeight:'bold'}}>쟤료 추가하기</Text>
+            </View>
+        )
+    }
+    const ListFooterComponent = () => {
+        return(
+            <View style={{
+                width:'80%',
+                position:'absolute',
+                bottom:0,
+                alignItems:"center",
+                alignSelf:"center",
+                justifyContent:"center",
+                height:50,
+            }}>
+                <Pressable style={{
+                    width:'100%',
+                    height:'100%',
+                    borderRadius:25,
+                    alignItems:"center",
+                    justifyContent:"center",
+                    backgroundColor:Colors.REFRIGATOR_AI_BUTTON}}
+                    onPress={handlePresentModalPress}> 
+                    <Text style={{color:Colors.FONT_WHITE,fontSize:18,fontWeight:'bold' }}>
+                        확인
+                    </Text>
+                </Pressable>
+            </View>
         )
     }
     return(
@@ -59,12 +104,17 @@ export function RefrigatorView(){
         <BottomSheetModalProvider>
         <BottomSheet
                 ref={bottomSheetModalRef}
-                index={1}
+                index={-1}
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
                 backdropComponent={BackDropView}
-                backgroundStyle={{backgroundColor:"white"}}
-            >
+                backgroundStyle={{backgroundColor:"white"}}>
+                    <BottomSheetFlatList
+                        data={foods}
+                        keyExtractor={(item)=>item.ingredient.title}
+                        renderItem={({item,index})=>{return(<AddItemView item={item}index={index}/>)}}
+                        ListHeaderComponent={ListHeaderComponent}/>
+                   <ListFooterComponent/>
                 </BottomSheet>
         </BottomSheetModalProvider>
         </GestureHandlerRootView>

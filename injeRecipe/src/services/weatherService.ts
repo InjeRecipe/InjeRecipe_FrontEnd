@@ -12,13 +12,14 @@ export const weatherService =() =>{
         console.log(server)
         console.log(data)
         try{ 
-            await axios.post(server,data).then((res)=>{
-                console.log(res.data)
-            })
-            
+            const res =await axios.post(server,data)
+                const responseData = JSON.parse(res.data.data);
+                 return responseData
+                
         }
+        
         catch(error){
-            console.log('???')
+            console.log('???qqqq')
         }
     }
     return{
