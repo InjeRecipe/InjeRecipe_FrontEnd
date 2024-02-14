@@ -3,6 +3,7 @@ import { NativeStackNavigationProp, createNativeStackNavigator } from "@react-na
 import { HomeScreen } from "../screens/home/HomeScreen"
 import BottomNavigator from "./BottomNavigator"
 import HomeStackNavigator from "./HomeNavigator"
+import RefrigatorNavigator from "./RefrigatorNavigator"
 
 const Stack = createNativeStackNavigator()
 export default function RootStackNavigation () {
@@ -15,6 +16,7 @@ export default function RootStackNavigation () {
             <Stack.Screen name="Home" component={HomeScreen}/>
             <Stack.Screen name="HomeStack" component={HomeStackNavigator}/>
             <Stack.Screen name="Bottom" component={BottomNavigator}/>
+            <Stack.Screen name="RefrigatorStack" component={RefrigatorNavigator}/>
         </Stack.Navigator>
     )
 }
