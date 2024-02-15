@@ -15,23 +15,24 @@ import {
   View,
  
 } from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-  
-import { GoogleAuthButton } from './src/screens/home/signin/google/GoogleAuthButton';
-import { LocationTestButton } from './src/Location/LocationTestButton';
-import { HomeScreen } from './src/screens/home/HomeScreen';
+
 import { NavigationContainer } from '@react-navigation/native';
-import RootStackNavigation from './src/navigations/RootStackNavigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeStackScreen from './src/navigations/HomeNavigator';
+import { Provider } from 'react-redux'
+import store from './src/redux/store';
+import RootStackNavigation from './src/navigations/RootStackNavigation';
 
 function App(){
  
   return (
     <SafeAreaProvider>
+      <Provider store={store}>
     <NavigationContainer>
+      
       <RootStackNavigation/>
+      
     </NavigationContainer>
+      </Provider>
     </SafeAreaProvider>
   );
 }
