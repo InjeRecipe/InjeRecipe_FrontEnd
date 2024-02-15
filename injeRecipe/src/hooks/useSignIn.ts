@@ -15,7 +15,9 @@ export const useSignIn =()=>{
         try {
           await GoogleSignin.hasPlayServices()
           
-            await GoogleSignin.signIn()
+          const res =await GoogleSignin.signIn()
+          console.log('res',res)
+          return res
           //setState({ userInfo, error: undefined });
         } catch (error:any) {
          
@@ -34,8 +36,17 @@ export const useSignIn =()=>{
         }
         }
       };
-    const onPressGoogleSignIn = () =>{
-        _signIn()
+    const onPressGoogleSignIn = async() =>{
+      try{
+        const signInResult =await _signIn()
+      return signInResult
+      }
+      catch(error){
+        
+      }
+      
+          
+        
     }
     return{
         googleSigninConfigure,
