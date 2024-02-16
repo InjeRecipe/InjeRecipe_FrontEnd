@@ -1,27 +1,33 @@
 import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { GoogleAuthButton } from "../../screens/home/signin/google/GoogleAuthButton";
-
-
 import { Margin } from "../../component/Margin";
 import { SignUpButton } from "./SignUpButton";
 import { LoginAimButton } from "./LoginAimButton";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { useSignIn } from "../../hooks/useSignIn";
-import { setLoginedUser } from "../../redux/action/actionLogin";
+import { setLoginedUser, setUserWeather } from "../../redux/action/actionLogin";
+import Geolocation from "@react-native-community/geolocation";
+import { weatherService } from "../../services/weatherService";
+import { useWeather } from "../../hooks/useWeather";
 
 export function HomeView() {
+    // hooks
     const navigation = useNavigation<any>()
-    const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
+    const dispatch = useDispatch()
     const {
-        googleSigninConfigure,
         isSignedIn,
+        googleSigninConfigure,
         getCurrentUser
     } = useSignIn()
+    // api
+    const {POST_WEATHER} = weatherService()
+    // state
+    const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
+    const [weather, setWeather] = useState<any>()
     const [isSignedInGoogle, setIsSignedInGoogle] = useState<boolean>()
-    const dispatch = useDispatch()
+    
 
     const getIsSignedIn = async () => {
         const result = await isSignedIn()
@@ -31,13 +37,33 @@ export function HomeView() {
     const getCurrentGoogleUser = async () => {
         const data = await getCurrentUser()
         dispatch(setLoginedUser(data))
-        navigation.navigate('Bottom')
+ 
     }
+    const getNowLocation = ()=> {
+        Geolocation.getCurrentPosition(data => {
+           const postData= {
+            lat:data.coords.latitude+"",
+            lon:data.coords.longitude+""
+        }
+       
+        POST_WEATHER(postData).then((res)=>{
+            console.log('POSTWEATHER',res.weather[0].main)
+            setWeather(res.weather[0].main) 
+            console.log('------------',res.weather[0].main) 
+            dispatch(setUserWeather(weather))
+        })
+           setTimeout(()=>{
+            // spinner 추가 필요
+            navigation.navigate('Bottom')
+        },1000)
+       })   
+   }
     useEffect(() => {
         googleSigninConfigure()
         getIsSignedIn()
         if (isSignedInGoogle) {
             getCurrentGoogleUser()
+            getNowLocation()
         }
     })
 

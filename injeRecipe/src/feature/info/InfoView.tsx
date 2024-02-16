@@ -6,7 +6,7 @@ import { RootReducerState } from "../../redux/store";
 import { url } from "inspector";
 
 export function InfoView(){
-    const userData = useSelector((state:RootReducerState)=> state.login?.state)
+    const userData = useSelector((state:RootReducerState)=> state.login.loginUser)
     useEffect(()=>{
         console.log('infoUserData',userData.user.name)
     })
