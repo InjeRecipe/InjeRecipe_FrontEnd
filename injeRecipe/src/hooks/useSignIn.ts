@@ -16,7 +16,6 @@ export const useSignIn =()=>{
           await GoogleSignin.hasPlayServices()
           
           const res =await GoogleSignin.signIn()
-          console.log('res',res)
           return res
           //setState({ userInfo, error: undefined });
         } catch (error:any) {
@@ -36,20 +35,30 @@ export const useSignIn =()=>{
         }
         }
       };
+
     const onPressGoogleSignIn = async() =>{
       try{
         const signInResult =await _signIn()
       return signInResult
       }
       catch(error){
-        
-      }
-      
-          
-        
+
+      }     
     }
+
+    const isSignedIn = async () => {
+      const isSignedIn = await GoogleSignin.isSignedIn();
+        return isSignedIn
+      
+    };
+    const getCurrentUser = async () => {
+      const currentUser = await GoogleSignin.getCurrentUser();
+      return currentUser
+    };
     return{
         googleSigninConfigure,
-        onPressGoogleSignIn
+        onPressGoogleSignIn,
+        isSignedIn,
+        getCurrentUser
     }
 }

@@ -4,6 +4,8 @@ import { useSignIn } from "../../hooks/useSignIn"
 import { useNavigation } from "@react-navigation/native"
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin"
 import { url } from "inspector"
+import { useDispatch } from "react-redux"
+import { setLoginedUser } from "../../redux/action/actionLogin"
 
 type props ={
     text:string,
@@ -15,15 +17,12 @@ export function LoginButton({text,value}:props){
         onPressGoogleSignIn
     } = useSignIn()
     const [btBgColor,setBtBgColor] = useState('')
-    const configureGoogleUser = async() =>{
-        const userData = await googleSigninConfigure()
-        console.log('hi user',userData)
-    }
+    const [isLoginedGoogle,setIsLoginedGoogle] = useState(false)
+    const dispatch = useDispatch()
     const navigation = useNavigation<any>()
+
     useEffect(()=>{
         if(text == "구글 계정을 통한 로그인"){
-            console.log('configure')
-            configureGoogleUser 
             setBtBgColor('white')           
         }
         else{
@@ -37,8 +36,13 @@ export function LoginButton({text,value}:props){
         else if(value =="google"){
             const getUserData = async() => {
                 const res = await onPressGoogleSignIn()
-                console.log(res,'res')
                 // res 요 녀석을 전역 스테이트로 관리하면 오케이
+                if(res!=undefined){
+                    dispatch(setLoginedUser(res))
+                    navigation.navigate('Bottom')
+                }
+                
+                
             }
             getUserData()
         }
