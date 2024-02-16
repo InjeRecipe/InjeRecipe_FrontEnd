@@ -14,14 +14,15 @@ export function InfoView(){
         <SafeAreaView style={{flex:1}}>
                 <View style={{height:50,borderWidth:1}}>
                     {/* header */}
-                    <InfoHeader userData={userData}/>
+                    <InfoHeader/>
                 </View>
-                <View style={{height:120,borderWidth:1,flexDirection:'row'}}>
+                <View style={{height:120,borderBottomWidth:1,flexDirection:'row'}}>
                     {/* header */}
                     <View style={{
                         flex:0.4,
                         alignItems:"center",
-                        justifyContent:"center"
+                        justifyContent:"center",
+                        borderRightWidth:1
                         }}>
                         {/* image */}
                         <Image
@@ -33,7 +34,6 @@ export function InfoView(){
                         flex:0.6,
                         justifyContent:"center",
                         paddingHorizontal:20,
-                        borderWidth:1
                     }}>
                         {/* recipe text */}
                         <Text style={{fontSize:17,marginBottom:10}}>{userData.user.name}</Text>
