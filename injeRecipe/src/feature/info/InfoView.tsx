@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import { Image, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Image, Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { InfoHeader } from "./InfoHeader";
 import { useSelector } from "react-redux";
 import { RootReducerState } from "../../redux/store";
 import { url } from "inspector";
+import { useNavigation } from "@react-navigation/core";
 
 export function InfoView(){
     const userData = useSelector((state:RootReducerState)=> state.login.loginUser)
+    const navigation = useNavigation<any>();
     useEffect(()=>{
-        console.log('infoUserData',userData.user.name)
+        console.log('infoUserData',userData)
     })
     return(
         <SafeAreaView style={{flex:1}}>
@@ -45,7 +47,9 @@ export function InfoView(){
                 </View>
                 
                     {/* flatlist로 대체 피드 형식으로? */}
-                
+                <Pressable style={{width:100,height:200}} onPress={()=>{navigation.navigate("Home")}}>
+                        <Text>로그아웃</Text>
+                    </Pressable>
     
         </SafeAreaView>
     )

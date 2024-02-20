@@ -9,7 +9,7 @@ import { chatGptService } from "../../../services/chatGptService";
 const hegiht = Dimensions.get('window').height
 export function WeatherCard({ height }: any) {
     const {POST_WEATHER} = weatherService()
-    const {GET_RECIPE} =chatGptService()
+    const {GET_RECIPE_WEHATER} =chatGptService()
     const [location,setLocation] = useState<any>()
     const [weather, setWeather] = useState<any>()
 

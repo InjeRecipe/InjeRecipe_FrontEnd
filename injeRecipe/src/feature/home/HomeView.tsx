@@ -7,10 +7,11 @@ import { LoginAimButton } from "./LoginAimButton";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { useSignIn } from "../../hooks/useSignIn";
-import { setLoginedUser, setUserWeather } from "../../redux/action/actionLogin";
+import { setLoginedUser, setUserWeather, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
 import Geolocation from "@react-native-community/geolocation";
 import { weatherService } from "../../services/weatherService";
 import { useWeather } from "../../hooks/useWeather";
+import { chatGptService } from "../../services/chatGptService";
 
 export function HomeView() {
     // hooks
@@ -23,20 +24,25 @@ export function HomeView() {
     } = useSignIn()
     // api
     const {POST_WEATHER} = weatherService()
+    const {GET_RECIPE_WEHATER} = chatGptService()
     // state
     const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
     const [weather, setWeather] = useState<any>()
     const [isSignedInGoogle, setIsSignedInGoogle] = useState<boolean>()
-    
+    const [getCurrentData,setGetCurrentData] = useState<boolean>()
 
     const getIsSignedIn = async () => {
         const result = await isSignedIn()
+        
         setIsSignedInGoogle(result)
     }
 
     const getCurrentGoogleUser = async () => {
         const data = await getCurrentUser()
-        dispatch(setLoginedUser(data))
+        
+        if(data ==null) setGetCurrentData(false)
+        else {setGetCurrentData(true)
+            dispatch(setLoginedUser(data))}
  
     }
     const getNowLocation = ()=> {
@@ -50,7 +56,10 @@ export function HomeView() {
             console.log('POSTWEATHER',res.weather[0].main)
             setWeather(res.weather[0].main) 
             console.log('------------',res.weather[0].main) 
+            // gpt asked need 
             dispatch(setUserWeather(weather))
+           
+            
         })
            setTimeout(()=>{
             // spinner 추가 필요
@@ -58,12 +67,22 @@ export function HomeView() {
         },1000)
        })   
    }
+   const getRecommendMenu = () =>{
+    GET_RECIPE_WEHATER(weather).then((res)=>{
+                
+        dispatch(setWeatherRecommendMenu(res))
+        
+    })
+   }
     useEffect(() => {
         googleSigninConfigure()
         getIsSignedIn()
         if (isSignedInGoogle) {
             getCurrentGoogleUser()
-            getNowLocation()
+            if(getCurrentData){
+                getRecommendMenu()
+                getNowLocation()
+        }
         }
     })
 
