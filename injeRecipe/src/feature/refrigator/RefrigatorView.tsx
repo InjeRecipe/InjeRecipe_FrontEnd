@@ -38,9 +38,10 @@ export function RefrigatorView(){
             <SafeAreaView style={{flex:1}}>
             <View style={{flex:0.06,backgroundColor:'red'}}>
                 <RefrigatorHeader
-                left={false}
-                right={true} 
-                handlePresentModalPress={handlePresentModalPress}/>    
+                    title="나의 냉장고"
+                    left={false}
+                    right={true} 
+                    handlePresentModalPress={handlePresentModalPress}/>    
             </View>
             <View style={{flex:0.94}}>
                 <View style={{borderWidth:1,flex:0.85}}>

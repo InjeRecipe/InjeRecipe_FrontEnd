@@ -11,6 +11,7 @@ import { RootReducerState } from "../../redux/store";
 import { useWeather } from "../../hooks/useWeather";
 import LottieView from "lottie-react-native";
 import { WeatherRecommendView } from "./WeatherRecommendView";
+import { KeyWordRecommendView } from "./KeyWordRcommendView";
 
 export function MainView() {
 
@@ -90,7 +91,7 @@ export function MainView() {
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white', }}>
+        <View style={{ flex: 1, backgroundColor: Colors.BACKGROUND_DEFAULT, }}>
             <View style={{
                 height: 50,
                 
@@ -156,11 +157,11 @@ export function MainView() {
                         </Text>
                     </View>
                 </Animated.View>
-                <View style={{ height: 690,borderWidth:1}}>
-                <WeatherRecommendView/>
+                <View style={{ height: 625,borderBottomWidth:0.8,borderColor:Colors.SEPARATED_LINE_TORNUP}}>
+                    <WeatherRecommendView/>
                 </View>
-                <View style={{ height: 800 }}>
-                    
+                <View style={{ height: 650,borderColor:Colors.SEPARATED_LINE_TORNUP,borderBottomWidth:0.8 }}>
+                    <KeyWordRecommendView/>
                 </View>
             </ScrollView>
 

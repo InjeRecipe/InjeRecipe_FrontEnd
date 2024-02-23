@@ -1,0 +1,60 @@
+export const useRecommend=()=>{
+    const sampleData = [
+        {id:1,
+            item:[
+            {
+                index:1,
+                title:'제육'
+            },
+            {
+                index:2,
+                title:'피자'
+            },
+            ]},
+        {id:2,
+            item:[
+                {
+                    index:1,
+                    title:'치킨'
+                },
+                {
+                    index:2,
+                    title:'햄버거'
+                },
+                ]
+        },
+        {id:3,
+            item:[
+            {
+                index:1,
+                title:'라면'
+            },
+            {
+                index:2,
+                title:'우동'
+            },
+            ]},
+        {id:4,
+            item:[
+            {
+                index:1,
+                title:'치즈'
+            },
+            {
+                index:2,
+                title:'육개장'
+            },
+            ]},
+        ]
+
+        const keyWord = [
+            {key:1,title:'한식'},
+            {key:2,title:'일식'},
+            {key:3,title:'중식'},
+            {key:4,title:'양식'},
+        ]
+    return{
+        keyWord,
+        sampleData
+    }
+}
