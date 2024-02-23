@@ -10,6 +10,7 @@ type props = {
 type componentProps = {
     left:boolean,
     right:boolean,
+    title:string,
     handlePresentModalPress:any
 }
 const HeaderIcon = ({id,func}:props) => {
@@ -32,6 +33,7 @@ const HeaderIcon = ({id,func}:props) => {
 export function RefrigatorHeader({
     left,
     right,
+    title,
     handlePresentModalPress
     }:componentProps) {
     const navigation = useNavigation<any>()
@@ -60,7 +62,7 @@ export function RefrigatorHeader({
                     color: Colors.FONT_WHITE,
                     fontSize: 18,
                     fontWeight: 'bold'
-                }}>나의 냉장고</Text>
+                }}>{title}</Text>
             </View>
             <View style={{ flex:0.1,height: '100%',justifyContent:"center"}}>
                 {/* <HeaderIcon func={}/> */}

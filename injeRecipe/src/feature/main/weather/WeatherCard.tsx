@@ -9,7 +9,7 @@ import { chatGptService } from "../../../services/chatGptService";
 const hegiht = Dimensions.get('window').height
 export function WeatherCard({ height }: any) {
     const {POST_WEATHER} = weatherService()
-    const {GET_RECIPE} =chatGptService()
+    const {GET_RECIPE_WEHATER} =chatGptService()
     const [location,setLocation] = useState<any>()
     const [weather, setWeather] = useState<any>()
 
@@ -33,8 +33,8 @@ export function WeatherCard({ height }: any) {
         console.log(typeof postData.lat)
         console.log(typeof postData.lon)
         POST_WEATHER(postData).then((res)=>{
-            console.log('POSTWEATHER',res.weather[0].main)
-            setWeather(res.weather[0].main)
+            console.log('POSTWEATHER',res.weather.main)
+            setWeather(res.weather.main)
         })
     }
    },[location])
@@ -42,7 +42,10 @@ export function WeatherCard({ height }: any) {
    useMemo(()=>{
         console.log(weather)
    },[weather])
- 
+    
+    
+       
+    
     return (
         <View style={{
             height: height * 0.5,
