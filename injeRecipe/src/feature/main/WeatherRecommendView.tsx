@@ -10,13 +10,14 @@ import { useRecommend } from "../../hooks/useRecommend";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../color/Colors";
 import { RecipeRenderItem } from "./RecipeRenderItem";
-export const WeatherRecommendView = () => {
+export const WeatherRecommendView = ({weatherRecipe}:any) => {
+    
     const data: any = useSelector<RootReducerState>((state) => state.login.recommendMenu)
     const { sampleData } = useRecommend()
     const { getHeight, getWeight } = useDimention()
-    // const [keyWord,setKeyword] = useState<Array<any>|any>(data.menu) 서버 끊겨있어서 임시 데이터
-    const [keyWord, setKeyword] = useState<Array<any> | any>(sampleData)
-
+    //const [keyWord,setKeyword] = useState<Array<any>|any>(data.menu) 
+    const [keyWords, setKeywords] = useState<Array<any> | any>(sampleData)
+    // console.log('item------------------/////---',weatherRecipe[0].COOKRCP01)
     return (
         <View style={{ flex: 1, alignItems: "center", }}>
             <View style={{ flex: 0.15, width: '100%', paddingHorizontal: 20, paddingTop: 20,marginTop:20 }}>
@@ -33,13 +34,17 @@ export const WeatherRecommendView = () => {
                         flex: 1,
                     }}
                     horizontal={true}
-                    data={keyWord}
-                    keyExtractor={item => item.id}
+                    data={weatherRecipe}
+                    
                     renderItem={({ item, index }) => {
                         console.log('myitem', item)
-                        return (
-                            <RecipeRenderItem item={item}index={index}/>
-                        )
+                        if(item != undefined){
+                            return (
+                                <RecipeRenderItem item={item}index={index}/>
+                            )
+                        }
+                        else return null
+                        
                     }} />
             </View>
             <View style={{

@@ -1,21 +1,25 @@
 import LottieView from "lottie-react-native";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Margin } from "../../component/Margin";
 import { SignUpButton } from "./SignUpButton";
 import { LoginAimButton } from "./LoginAimButton";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { useSignIn } from "../../hooks/useSignIn";
-import { setLoginedUser, setUserWeather, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
+import { setLoginedUser, setUserWeather, setWeatherRecipe, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
 import Geolocation from "@react-native-community/geolocation";
 import { weatherService } from "../../services/weatherService";
 import { useWeather } from "../../hooks/useWeather";
 import { chatGptService } from "../../services/chatGptService";
+import { recipeService } from "../../services/recipeService";
+import { sampleData } from "../../data/sampleData";
 
 export function HomeView() {
     // hooks
     const navigation = useNavigation<any>()
+    const {item} = sampleData()
+    console.log('item==============',item)
     const dispatch = useDispatch()
     const {
         isSignedIn,
@@ -25,12 +29,13 @@ export function HomeView() {
     // api
     const {POST_WEATHER} = weatherService()
     const {GET_RECIPE_WEHATER} = chatGptService()
+    const {GET_RECIPE} = recipeService()
     // state
     const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
     const [weather, setWeather] = useState<any>()
     const [isSignedInGoogle, setIsSignedInGoogle] = useState<boolean>()
     const [getCurrentData,setGetCurrentData] = useState<boolean>()
-
+    const [first,setFirst] = useState(0)
     const getIsSignedIn = async () => {
         const result = await isSignedIn()
         
@@ -51,38 +56,54 @@ export function HomeView() {
             lat:data.coords.latitude+"",
             lon:data.coords.longitude+""
         }
-       
+        
         POST_WEATHER(postData).then((res)=>{
             console.log('POSTWEATHER',res.weather[0].main)
             setWeather(res.weather[0].main) 
             console.log('------------',res.weather[0].main) 
             // gpt asked need 
             dispatch(setUserWeather(weather))
-           
             
         })
-           setTimeout(()=>{
-            // spinner 추가 필요
+        dispatch(setWeatherRecipe(item))
+        setTimeout(()=>{
+            
             navigation.navigate('Bottom')
-        },1000)
+        },2000)
        })   
+      
    }
-   const getRecommendMenu = () =>{
-    GET_RECIPE_WEHATER(weather).then((res)=>{
-                
+   const getRecipeApi = async() => {
+     GET_RECIPE_WEHATER(weather).then((res)=>{
+        //날씨에 따른 레시피 리턴
+        const data = [0,0,0,0,0,0,0,0]
         dispatch(setWeatherRecommendMenu(res))
-        
+        data.map((item,index)=>{
+            const data = {
+                start:0,
+                end:1,
+                rcpNm:res.menu[index]
+            }
+            setTimeout(() => {
+                GET_RECIPE(data);
+            }, index * 800);  
+        })
     })
+    setTimeout(()=>{navigation.navigate('Bottom')},1000)
+   
    }
+  
     useEffect(() => {
         googleSigninConfigure()
         getIsSignedIn()
         if (isSignedInGoogle) {
             getCurrentGoogleUser()
             if(getCurrentData){
-                getRecommendMenu()
                 getNowLocation()
-        }
+                // getRecipeApi()
+                // 시간 너무 오래 걸리고 요청 횟수 제한으로 고정값으로 수정하여 발표 진행
+                // 가라 코드      
+            }
         }
     })
 
@@ -141,8 +162,6 @@ export function HomeView() {
             </View>
             <View style={styles.buttonSection}>
                 {/* button section */}
-                {/* 구글 로그인 로그인 등 컴포넌트화 시키기 */}
-                {/* <GoogleAuthButton /> */}
                 <Margin height={30} />
                 <SignUpButton LoginIsExpanded={LoginIsExpanded} />
                 <Margin height={10} />
