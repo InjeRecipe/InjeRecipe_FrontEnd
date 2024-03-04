@@ -20,21 +20,21 @@ export function RefrigatorView(){
     const snapPoints = useMemo(() => ['10%', '90%'], []);
     const [isExpanded,setIsExpanded] = useState(true)
     const {foods} =useRefrigator()
+    const [postData,setPostData] = useState([''])
     // variables
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
       }, []);
       const handlePresentModalPress = () => {
-        
         if(isExpanded){bottomSheetModalRef.current?.snapToIndex(1)}
-        else {bottomSheetModalRef.current?.close()}
+        else {
+            postData
+            bottomSheetModalRef.current?.close()}
         console.log(isExpanded)
         setIsExpanded(!isExpanded)
-        
-      };
+    };
     const BackDropView = () => {
         return(
-            
             <SafeAreaView style={{flex:1}}>
             <View style={{flex:0.06,backgroundColor:'red'}}>
                 <RefrigatorHeader
@@ -44,22 +44,18 @@ export function RefrigatorView(){
                     handlePresentModalPress={handlePresentModalPress}/>    
             </View>
             <View style={{flex:0.94}}>
-                <View style={{borderWidth:1,flex:0.85}}>
+                <View style={{borderWidth:4,flex:0.85,borderColor:Colors.SEPARATED_LINE}}>
                     {/* item view */}
-                    <RefrigatorItemView/>
-                    
+                    <RefrigatorItemView postData={postData}/>
                 </View>
                 <View style={{flex:0.15}}>
                     {/* button view */}
-                    <RefrigatorAiButton/>
+                    <RefrigatorAiButton postData={postData}/>
                 </View>
-                
             </View>
             {isExpanded?null:<View style={{position:'absolute',backgroundColor:'#00000070',width:1000,height:1000,}}/>}
             {/* 필름뷰 트리거 달아주기 */}
-            
         </SafeAreaView>
-        
         )
     }
     const ListHeaderComponent = () =>{
@@ -83,8 +79,7 @@ export function RefrigatorView(){
                 alignItems:"center",
                 alignSelf:"center",
                 justifyContent:"center",
-                height:50,
-            }}>
+                height:50,}}>
                 <Pressable style={{
                     width:'100%',
                     height:'100%',
@@ -113,7 +108,7 @@ export function RefrigatorView(){
                     <BottomSheetFlatList
                         data={foods}
                         keyExtractor={(item)=>item.ingredient.title}
-                        renderItem={({item,index})=>{return(<AddItemView item={item}index={index}/>)}}
+                        renderItem={({item,index})=>{return(<AddItemView item={item}index={index} postData={postData} setPostData={setPostData}/>)}}
                         ListHeaderComponent={ListHeaderComponent}/>
                    <ListFooterComponent/>
                 </BottomSheet>

@@ -3,51 +3,59 @@ import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from "react-
 import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 
-export const AddItemView = ({ item, index }: any) => {
+export const AddItemView = ({ item, index,postData,setPostData }: any) => {
     const { getHeight } = useDimention()
     const [num, setNum] = useState(0)
+    
+    const itemImage = item
     const items = item.ingredient.items || []
     const ItemRenderView = ({ item, index }: any) => {
         const [selected,setSelected] = useState(false)
+        
         const onPressItem = () => {
+            
+            if(!selected){
+                postData.push(item)
+                console.log(postData)
+            }
             setSelected(!selected)
+            
         }
+        
         return (
             <View style={{
                 width: '25%',
-                height: getHeight() * .11,
+                height: getHeight() * .12,
                 alignItems: 'center',
-                marginBottom: 5
-            }}>
-                <TouchableOpacity style={{
-                    flex: 0.8,
-                    width: '100%',
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 5
-                }}
-                    onPress={onPressItem}>
-                    <Image style={{
+                marginBottom: 5}}>
+                <TouchableOpacity 
+                    style={{
+                        flex: 0.9,
+                        width: '100%',
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 5}}
+                    onPress={()=>{onPressItem()}}>
+                    <Image 
+                        source={{uri:itemImage.ingredient.images[index]}}
+                    style={{
                         backgroundColor: selected?Colors.SELECTED_ITEM_BACKGROUND:'white',
-                        width: '65%',
+                        width: 75,
+                        height:75,
+                        
+                        resizeMode:'contain',
                         flex: 1,
-                        borderRadius: 80,
-
-                    }} />
+                        borderRadius: 80,}}/>
                 </TouchableOpacity>
-
                 <Text>{item}</Text>
             </View>
         )
     }
-    const a = []
-    
     useEffect(() => {
         if (items.length % 4 > 0) {
             setNum(1)
         }
         else setNum(0)
-
     })
     return (
         <View
@@ -67,11 +75,7 @@ export const AddItemView = ({ item, index }: any) => {
                 horizontal={false}
                 numColumns={4}
                 renderItem={({ item, index }: any) => {
-                    return (
-                        <ItemRenderView item={item} />
-                    )
-                }}
-            />
+                    return (<ItemRenderView item={item} index={index}/>)}}/>
         </View>
     )
 }

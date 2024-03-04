@@ -1,13 +1,32 @@
-import React from "react"
-import { Image, Text, View } from "react-native"
+import React, { useEffect } from "react"
+import { Image, Text, TouchableOpacity, View } from "react-native"
 import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
+import { useNavigation } from "@react-navigation/core"
 
 export const RecipeRenderItem=({item,index}:any) =>{
     const { getHeight, getWeight } = useDimention()
+    const data= item
+    useEffect(()=>{
+        console.log('item***/*/*/*/*/*/**//*/*wwsw', data.COOKRCP01.row[0])
+    },[])
+    console.log(item)
+    function convertToHttps(path:string) {
+        if (path.startsWith('http://')) {
+            return path.replace('http://', 'https://');
+        } else {
+            return path;
+        }
+    }
+    const navigation = useNavigation<any>()
+    const onPressRecipe = () => {
+        const item = data.COOKRCP01.row[0]
+        navigation.navigate('RecipeView',{item})
+    }
     const ItemView = ({num}:any) => {
-        console.log('item',item.item[num])
+        
         return(
+            <TouchableOpacity style={{flex:1}} onPress={onPressRecipe}>
             <View style={{ 
                 flex: 0.5,
                 backgroundColor:Colors.FONT_WHITE,
@@ -22,18 +41,19 @@ export const RecipeRenderItem=({item,index}:any) =>{
                     style={{flex:1,
                         borderTopLeftRadius:10,
                         borderTopRightRadius:10}}
-                    source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/testDishImage.jpeg'}}/>
+                    source={{uri:convertToHttps(data.COOKRCP01.row[0].ATT_FILE_NO_MAIN)}}/>
                 </View>
                 <View style={{flex:0.3,width:'100%',alignItems:"center",justifyContent:"center",}}>
-                    <Text>
-                        작성자 이름
+                    <Text style={{color:Colors.BUTTON_SIGNIN}}>
+                        인제 레시피
                     </Text>
-                <Text style={{color:Colors.BUTTON_SIGNIN}}>
-                    {item.item[num].title}
+                <Text style={{}}>
+                    {data.COOKRCP01.row[0].RCP_NM}
                 </Text>
                 </View>
                 
             </View>
+            </TouchableOpacity>
         )
     }
     return (
@@ -44,7 +64,7 @@ export const RecipeRenderItem=({item,index}:any) =>{
 
         }}>
             <ItemView num={0}/>
-            <ItemView num={1}/>
+            {/* <ItemView num={1}/> */}
             
         </View>
     )
