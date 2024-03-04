@@ -50,10 +50,7 @@ export const useSignIn = () => {
 
     }
   }
-  
-  const googleSignOut = async() => {
-     await GoogleSignin.signOut();
-  }
+
   const isSignedIn = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     return isSignedIn
@@ -74,7 +71,6 @@ export const useSignIn = () => {
     googleSigninConfigure,
     onPressGoogleSignIn,
     isSignedIn,
-    getCurrentUser,
-    googleSignOut
+    getCurrentUser
   }
 }

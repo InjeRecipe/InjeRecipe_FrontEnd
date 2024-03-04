@@ -4,16 +4,15 @@ import { Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 
-export function SubmitButton({onPressClear}:any){
+export function SubmitButton({LoginIsExpanded}:any){
     const navigation = useNavigation<any>()
     const onPressSignUp = () => {
-        onPressClear()
-            // console.log(res)
-            navigation.navigate('HomeStack',{screen:'SignIn'})    
+        
+        navigation.navigate('HomeStack',{screen:'SignIn'})
     }
     return(
         <>
-        
+        {LoginIsExpanded?null:
         <Pressable style={{
             width:"75%",
             alignItems:"center",
@@ -27,7 +26,7 @@ export function SubmitButton({onPressClear}:any){
             <Text style={{ fontSize: 22, color: "#FFFFFF" }}>완료</Text>
             
             
-        </Pressable>
+        </Pressable>}
         </>
     )
 }

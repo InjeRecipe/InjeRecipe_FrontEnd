@@ -14,7 +14,6 @@ export const weatherService =() =>{
         try{ 
             const res =await axios.post(server,data)
                 const responseData = JSON.parse(res.data.data);
-                console.log('responseData',responseData)
                  return responseData
                 
         }

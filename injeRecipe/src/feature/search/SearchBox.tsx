@@ -2,16 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Animated, Keyboard, Pressable, Text, TextInput, View } from "react-native";
 import { Colors } from "../../color/Colors";
 import Icon from 'react-native-vector-icons/Ionicons'
-import { recipeService } from "../../services/recipeService";
-import { useDispatch } from "react-redux";
-import { searchRecipe } from "../../redux/action/actionRecipe";
 
-export function SearchBox({searchItem,setSearchItem}:any){
-    const {GET_SERACH_RECIPE} = recipeService()
+export function SearchBox(){
+    
     const interpolateAnim = useRef(new Animated.Value(0)).current
-    const [text,setText] = useState('')
+    const [searchText,setSearchText] = useState('')
     const [isExpanded,setIsExpanded] = useState(false)
-    const dispatch = useDispatch()
     const onPressSearchButton = () =>{
         Animated.timing(interpolateAnim, {
             toValue: isExpanded?0:1,
@@ -21,27 +17,8 @@ export function SearchBox({searchItem,setSearchItem}:any){
         }).start(()=>{
             setIsExpanded(!isExpanded)
         })
-        // 레시피 요청
-       
-       
-        
     }
-    const focusOutSearch = () =>{
-        onPressSearchButton()
-        const data = {
-            start:0,
-            end:5,
-            rcpNm:text
-        }
-        console.log(data,'@@@@@@@@@@@@@')
-        if(text!=''){
-            GET_SERACH_RECIPE(data).then((res:any)=>{
-                console.log('res===========',res)
-                setSearchItem(res)
-            })
-            
-        }
-    }
+    
     return(
         <View style={{flexDirection:"row",paddingHorizontal:10}}>
             {/* 전체적인 뷰 */}
@@ -65,11 +42,11 @@ export function SearchBox({searchItem,setSearchItem}:any){
                     style={{
                         flex:1,
                         paddingHorizontal:10}}
-                    value={text}
+                    value={searchText}
                     onFocus={onPressSearchButton}
-                    onChangeText={(value)=>{setText(value)}}
+                    onChangeText={(value)=>{setSearchText(value)}}
                     onSubmitEditing={()=>{Keyboard.dismiss}}
-                    onEndEditing={()=>{setIsExpanded(false);focusOutSearch();}}
+                    onEndEditing={()=>{setIsExpanded(false);onPressSearchButton();}}
                     placeholder="레시피를 검색해주세요"/>
             </View>
             </Animated.View>
@@ -82,7 +59,7 @@ export function SearchBox({searchItem,setSearchItem}:any){
                 justifyContent:"center"}}>
                 <Pressable 
                     onPress={()=>{
-                    setText('')
+                    setSearchText('')
                     Keyboard.dismiss()}}>
                     <Text>취소</Text>
                 </Pressable>

@@ -5,13 +5,10 @@ import { useSelector } from "react-redux";
 import { RootReducerState } from "../../redux/store";
 import { url } from "inspector";
 import { useNavigation } from "@react-navigation/core";
-import { Colors } from "../../color/Colors";
-import { useSignIn } from "../../hooks/useSignIn";
 
 export function InfoView(){
     const userData = useSelector((state:RootReducerState)=> state.login.loginUser)
     const navigation = useNavigation<any>();
-    const {googleSignOut} = useSignIn()
     useEffect(()=>{
         console.log('infoUserData',userData)
     })
@@ -50,22 +47,8 @@ export function InfoView(){
                 </View>
                 
                     {/* flatlist로 대체 피드 형식으로? */}
-                <Pressable style={{width:300,height:50,
-                borderRadius:15,
-                alignSelf:"center",
-                marginTop:20,borderWidth:0.5,
-                justifyContent:"center",
-                borderColor:Colors.SEPARATED_LINE_TORNUP}} onPress={()=>{
-                    googleSignOut().then(()=>{
-                        setTimeout(()=>{
-
-                        },1000)
-                        
-                        navigation.navigate("Home")
-                    })
-                    
-                    }}>
-                        <Text style={{fontSize:22,alignSelf:"center"}}>로그아웃</Text>
+                <Pressable style={{width:100,height:200}} onPress={()=>{navigation.navigate("Home")}}>
+                        <Text>로그아웃</Text>
                     </Pressable>
     
         </SafeAreaView>

@@ -7,6 +7,7 @@ export function SearchHeader(){
     return(
         <View style={{
             flex:1,
+            borderWidth:1,
             backgroundColor:Colors.BUTTON_SIGNIN,
             alignItems:'flex-start',
             justifyContent:'center',

@@ -1,11 +1,10 @@
 
-import { SET_LOGINED_USER, SET_USER_WEATHER, SET_WEATHER_RECIPE, SET_WEATHER_RECOMMEND_MENU } from "../action/actionLogin"
+import { SET_LOGINED_USER, SET_USER_WEATHER, SET_WEATHER_RECOMMEND_MENU } from "../action/actionLogin"
 
 const data ={
     loginUser:null,
     userWeather:null,
-    recommendMenu:null,
-    weatherRecipe:null
+    recommendMenu:null
 }
 export const loginReducer = (state = data,action:any) =>{
     
@@ -34,12 +33,6 @@ export const loginReducer = (state = data,action:any) =>{
             return{
                 ...state,
                 recommendMenu:action.data
-            }
-        }
-        case SET_WEATHER_RECIPE:{
-            return{
-                ...state,
-                weatherRecipe:action.data
             }
         }
     }

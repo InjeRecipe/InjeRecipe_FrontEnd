@@ -26,14 +26,14 @@ export const useWeather = () =>{
             }
             
         }
-        else if(weather=="Clear"){
+        else if(weather=='clear'){
             return{
                 AiMessage:weatherMessage.clear,
                 BgColor:weatherdBackColor.clear,
                 ImageUri:weahterBackground.clear
             }
         }
-        else if(weather=='Rain'){
+        else if(weather=='rain'){
             return{
                 AiMessage:weatherMessage.rain,
                 BgColor:weatherdBackColor.rain,

@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useRecommend } from "../../hooks/useRecommend"
 import { RecipeRenderItem } from "./RecipeRenderItem"
 
-export const KeyWordRecommendView = ({weatherRecipe}:any) => {
+export const KeyWordRecommendView = () => {
     const {
         sampleData,
         keyWord
@@ -81,8 +81,8 @@ export const KeyWordRecommendView = ({weatherRecipe}:any) => {
                             paddingVertical:8
                         }}
                         horizontal={true}
-                        data={weatherRecipe}
-                        keyExtractor={item => `'`}
+                        data={recepeItem}
+                        keyExtractor={item => item.id}
                         renderItem={({ item, index }) => {
                             return(<RecipeRenderItem item={item}index={index}/>)
                         }} />

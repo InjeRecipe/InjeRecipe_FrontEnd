@@ -1,34 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { Colors } from "../../color/Colors";
 import { useNavigation } from "@react-navigation/core";
-import { chatGptService } from "../../services/chatGptService";
-import { recipeService } from "../../services/recipeService";
 
 
-export function RefrigatorAiButton({postData}:any){
-    console.log('button',postData)
-    const navigation = useNavigation<any>();  
-    const {GET_REFIGATOR_RECOMMEND} = chatGptService()
-    const {GET_SERACH_RECIPE} = recipeService()
-    const [text,setText] = useState('')  
+export function RefrigatorAiButton(){
+    const navigation = useNavigation<any>();    
     const onPressRecommendButton = () => {
-        GET_REFIGATOR_RECOMMEND(postData).then((res:string)=>{
-                setText(res)
-                console.log(res)    
-                    const postRecipeData = {
-                        start:0,
-                        end:1,
-                        rcpNm:res
-                    }      
-                    GET_SERACH_RECIPE(postRecipeData).then((item)=>{
-                        
-                        const props =item.COOKRCP01.row[0]
-                        
-                        navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:props}})
-                    })
-                
-            }) 
+        navigation.navigate('RefrigatorStack',{screen:'AiRecommend'})
+        
     }
     return(
         <View style={{flex:1,justifyContent:"center"}}>

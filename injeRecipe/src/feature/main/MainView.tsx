@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Image, PanResponder, Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Animated, Image, PanResponder, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { WeatherCard } from "./weather/WeatherCard";
 import { Header } from "../../component/Header";
 import { Margin } from "../../component/Margin";
@@ -12,22 +12,18 @@ import { useWeather } from "../../hooks/useWeather";
 import LottieView from "lottie-react-native";
 import { WeatherRecommendView } from "./WeatherRecommendView";
 import { KeyWordRecommendView } from "./KeyWordRcommendView";
-import  Icon  from "react-native-vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/core";
 
 export function MainView() {
 
     const { getHeight } = useDimention()
     const height = getHeight()
     const { getWeatherState } = useWeather()
-    const navigation = useNavigation<any>();
     const [bgColor, setBgColor] = useState<string | undefined>('')
     const [imageUri, setImageUri] = useState<any>('')
     const [aiMessage, setAiMessage] = useState<string | undefined>('')
 
     const weather = useSelector((state: RootReducerState) => state.login.userWeather)
-    const weatherRecipe = useSelector((state: RootReducerState) => state.login.weatherRecipe)
-    console.log('weatherRecipe=======================',weatherRecipe)
+
 
     useEffect(() => {
         console.log(weather)
@@ -93,36 +89,28 @@ export function MainView() {
             })]
             Animated.parallel(anims).start();     
     };
-    const onPressCreateRecipe = () => {
-        navigation.navigate('EditView')
-    }
+
     return (
-        <View style={{ 
-            flex: 1, 
-            backgroundColor: Colors.BACKGROUND_DEFAULT, }}>
+        <View style={{ flex: 1, backgroundColor: Colors.BACKGROUND_DEFAULT, }}>
             <View style={{
                 height: 50,
+                
             }}>
-                {/* 세이프 아리아 방지뷰 */}
             </View>
             <Animated.View style={{
                 flex: 0.05,
                 opacity:fadeTitleAnim,
                 alignItems:'center',
                 justifyContent: 'center',
-                flexDirection:'row',}}>
-                <View style={{position:"absolute",left:40}}>
-                     <LottieView
-                            style={{ width: 45, height: 45, }}
+                flexDirection:'row',
+                
+            }}>
+                <View style={{position:"absolute",right:40}}>
+                <LottieView
+                            style={{ width: 50, height: 50, }}
                             autoPlay
                             source={{ uri: imageUri }} />
-
                 </View>
-                <Pressable 
-                    style={{position:"absolute",right:40}}
-                    onPress={onPressCreateRecipe}>
-                    <Icon name="create-outline" size={24}/>
-                </Pressable>
                 <View>
                     
                 </View>
@@ -146,13 +134,16 @@ export function MainView() {
                         paddingHorizontal: 40,
                         alignItems: "flex-end",
                         flexDirection: 'row',
-                        paddingVertical: 30}}>
+                        paddingVertical: 30
+                    }}>
                         <View style={{ backgroundColor:bgColor,width:'100%',borderRadius:20}}>
-                            <LottieView
-                                style={{ width: 100, height: 120, }}
-                                autoPlay
-                                source={{ uri: imageUri }} />
+                        <LottieView
+                            style={{ width: 100, height: 120, }}
+                            autoPlay
+                            source={{ uri: imageUri }} />
                         </View>
+                       
+
                     </View>
                     <View style={{
                         flex: 0.5,
@@ -167,10 +158,10 @@ export function MainView() {
                     </View>
                 </Animated.View>
                 <View style={{ height: 625,borderBottomWidth:0.8,borderColor:Colors.SEPARATED_LINE_TORNUP}}>
-                    <WeatherRecommendView weatherRecipe={weatherRecipe}/>
+                    <WeatherRecommendView/>
                 </View>
-                 <View style={{ height: 650,borderColor:Colors.SEPARATED_LINE_TORNUP,borderBottomWidth:0.8 }}>
-                    {/* <KeyWordRecommendView weatherRecipe={weatherRecipe}/> */}
+                <View style={{ height: 650,borderColor:Colors.SEPARATED_LINE_TORNUP,borderBottomWidth:0.8 }}>
+                    <KeyWordRecommendView/>
                 </View>
             </ScrollView>
 
@@ -178,4 +169,3 @@ export function MainView() {
         </View>
     )
 }
-
