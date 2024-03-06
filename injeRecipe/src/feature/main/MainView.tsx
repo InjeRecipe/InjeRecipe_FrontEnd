@@ -5,7 +5,7 @@ import { Header } from "../../component/Header";
 import { Margin } from "../../component/Margin";
 import { Colors } from "../../color/Colors";
 import { useDimention } from "../../hooks/useDimension";
-import { MainHeaderAnim } from "./MainHeaderAnim";
+
 import { useSelector } from "react-redux";
 import { RootReducerState } from "../../redux/store";
 import { useWeather } from "../../hooks/useWeather";
@@ -94,7 +94,8 @@ export function MainView() {
             Animated.parallel(anims).start();     
     };
     const onPressCreateRecipe = () => {
-        navigation.navigate('EditView')
+        
+        navigation.navigate('EditStack',{screen:'EditInfoView'})
     }
     return (
         <View style={{ 

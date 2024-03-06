@@ -5,11 +5,11 @@ export const recipeService =() =>{
 
     const GET_RECIPE = async (data:any) =>{
         
-        const server = `${path}/api/recipe`
+        const server = `${path}/api/recipes`
         console.log(server)
         console.log(data)
         try{ 
-            const res =await axios.get(server,{
+            const res =await axios.post(server,{
                 params:data
             })
             console.log(res.data)    
@@ -23,17 +23,15 @@ export const recipeService =() =>{
     }
     const GET_SERACH_RECIPE = async (data:any) =>{
         
-        const server = `${path}/api/recipe`
+        const server = `${path}/api/recipes`
         // console.log(data)
         const postData = data
         try{ 
-            const res =await axios.get(server,{
-                params:postData
-            })
-            console.log(res.data)
-            const responseData = JSON.parse(res.data.data);
-            console.log('GET_SERACH_RECIPE =============',responseData)
-            return responseData
+            const res =await axios.post(server,postData)
+            
+            
+            console.log('GET_SERACH_RECIPE =============',res.data)
+            return res.data
                 
         }
         

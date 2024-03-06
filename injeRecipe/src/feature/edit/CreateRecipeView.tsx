@@ -9,7 +9,7 @@ export const CreateRecipeView = () => {
     const {getHeight} = useDimention()
     return(
         <SafeAreaView>
-            <EditViewHeader/>
+            <EditViewHeader next='완료' prev='<'/>
             <EditViewBody/>
             
         </SafeAreaView>

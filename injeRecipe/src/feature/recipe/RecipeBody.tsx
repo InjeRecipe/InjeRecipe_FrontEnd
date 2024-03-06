@@ -11,22 +11,23 @@ export const RecipebodyView =({recipeData}:any) => {
 // MANUAL 속성과 MANUAL_IMG 속성을 각각 순서대로 배열에 담음
 const manualArray = [];
 for (let i = 1; i <= 20; i++) {
-    const key = `MANUAL${i.toString().padStart(2, '0')}`;
-    if (recipeData.item[key] !== "") {
+    const key = `recipe_manual${i.toString().padStart(1)}`;
+    console.log(key)
+    if (recipeData.item.key !== "") {
         manualArray.push(recipeData.item[key]);
     }
 }
 
 const manualImgArray = [''];
 for (let i = 1; i <= 20; i++) {
-    const key = `MANUAL_IMG${i.toString().padStart(2, '0')}`;
-    if (recipeData.item[key] !== "") {
+    const key = `recipe_image${i.toString().padStart(1)}`;
+    if (recipeData.item.key !== "") {
         manualImgArray.push(recipeData.item[key]);
     }
 }
 
 const RecipeBodyRenderItem =({item,index}:any) => {
-    const data = manualImgArray[index+1]
+    const data = manualImgArray[index+2]
     
  function convertToHttps(path:string) {
             if (path.startsWith('http://')) {

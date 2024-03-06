@@ -17,7 +17,7 @@ export const RecipeInfoView = ({recipeData}:any) => {
     
     const dataArray = recipeData.item.RCP_PARTS_DTLS.split(',');
     console.log('REcipeInfoView ====== ',dataArray)
-    const path = `${recipeData.item.ATT_FILE_NO_MAIN}`
+    const path = `${recipeData.item.recipe_file_s}`
         function convertToHttps(path:string) {
             if (path.startsWith('http://')) {
                 return path.replace('http://', 'https://');

@@ -4,11 +4,16 @@ import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native"
-export const EditViewHeader = () => {
+export const EditViewHeader = ({prev,next}:any) => {
     const { getHeight } = useDimention()
     const navigation = useNavigation<any>()
     const onPressNext = () => {
-        
+        if(next=='다음'){
+            navigation.navigate('EditStack',{screen:"EditView"})
+        }
+        else{
+            navigation.navigate('Bottom')
+        }
     }
     const onPressPrev = () => {
         navigation.pop()
@@ -34,12 +39,13 @@ export const EditViewHeader = () => {
                         fontSize:18,
                         fontWeight:'bold'}}>레시피 작성하기</Text>        
                 </View>
-                <View style={{
+                <Pressable style={{
                     flex:0.15,
                     width:'100%',
-                    alignItems:"center"}}>
-                    <Text style={{color:'white',fontSize:15}}>완료</Text>
-                </View>
+                    alignItems:"center"}}
+                    onPress={onPressNext}>
+                    <Text style={{color:'white',fontSize:15}}>{next=='다음'?next:'완료'}</Text>
+                </Pressable>
             
         </View>
     )

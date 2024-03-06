@@ -13,7 +13,7 @@ export const SearchBody = ({searchItem, setSearchItem}:any) => {
 //    const [renderData, setRenderData] = useState<any>(data)
     const navigation = useNavigation<any>()
     const RenderItem = ({item,index}:any) => {
-        const path = `${item.ATT_FILE_NO_MAIN}`
+        const path = `${item.recipe_file_s}`
         
         const onPressSearchItem = () => {
             navigation.navigate('RecipeView',{item})
@@ -25,8 +25,10 @@ export const SearchBody = ({searchItem, setSearchItem}:any) => {
                 return path;
             }
         }
-
-        console.log(item)
+        useEffect(()=>{
+            console.log("search Body log =========",item)
+        })
+        
         return(
             <TouchableOpacity onPress={onPressSearchItem}>
         <View style={{ 
@@ -61,8 +63,8 @@ export const SearchBody = ({searchItem, setSearchItem}:any) => {
                 </View>
                 <View style={{flex:0.6,justifyContent:"center",paddingHorizontal:10}}>
                     {/* info section */}
-                    <Text style={{fontSize:18,marginBottom:15}}>{item.RCP_NM}</Text>
-                    <Text style={{fontSize:15,color:Colors.SEPARATED_LINE_TORNUP}}>{item.RCP_PAT2}</Text>
+                    <Text style={{fontSize:18,marginBottom:15}}>{item.recipe_nm}</Text>
+                    <Text style={{fontSize:15,color:Colors.SEPARATED_LINE_TORNUP}}>{item.recipe_eng} kacl</Text>
                     <Text style={{fontSize:15,color:Colors.BUTTON_SIGNIN}}>인제레시피</Text>
                 </View>
                 <View style={{flex:0.1, justifyContent:"center"}}>
@@ -84,7 +86,7 @@ export const SearchBody = ({searchItem, setSearchItem}:any) => {
                 <FlatList
                 style={{flex:1,paddingTop:30}}
                 bounces={false}
-                data={searchItem.COOKRCP01.row}
+                data={searchItem}
                 renderItem={({item,index}:any)=>{return(<RenderItem item={item} index={index}/>)}}
                 />
             
@@ -98,6 +100,7 @@ export const SearchBody = ({searchItem, setSearchItem}:any) => {
     }
     
     return(
+        
           <RecipeResultView/>
         
         

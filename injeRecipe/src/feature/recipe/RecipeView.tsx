@@ -21,7 +21,7 @@ export const RecipeView = () => {
                 bounces={false}
                 style={{ flex: 1, borderBottomWidth: 1,borderColor:Colors.SEPARATED_LINE }}>
                 <View style={{ height: getHeight() * 1, borderWidth: 1 }}>
-                    <RecipeInfoView recipeData={recipeData}/>
+                    {/* <RecipeInfoView recipeData={recipeData}/> */}
                 </View>
                 <View style={{width:'100%' }}>
                     <RecipebodyView recipeData={recipeData}/>

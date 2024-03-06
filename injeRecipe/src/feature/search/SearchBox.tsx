@@ -29,15 +29,13 @@ export function SearchBox({searchItem,setSearchItem}:any){
     const focusOutSearch = () =>{
         onPressSearchButton()
         const data = {
-            start:0,
-            end:5,
-            rcpNm:text
+            keyword:text
         }
         console.log(data,'@@@@@@@@@@@@@')
         if(text!=''){
             GET_SERACH_RECIPE(data).then((res:any)=>{
-                console.log('res===========',res)
-                setSearchItem(res)
+                console.log('res===========',res.data)
+                setSearchItem(res.data)
             })
             
         }
@@ -52,7 +50,7 @@ export function SearchBox({searchItem,setSearchItem}:any){
             })}}>
             {/* 검색창 애니메이션 뷰 */}
             <View style={{
-                backgroundColor:Colors.SEPARATED_LINE,
+                backgroundColor:Colors.BACKGROUND_WHITE_DOWN,
                 height:40,
                 paddingHorizontal:10,
                 alignItems:"center",
@@ -64,7 +62,9 @@ export function SearchBox({searchItem,setSearchItem}:any){
                 <TextInput
                     style={{
                         flex:1,
-                        paddingHorizontal:10}}
+                        paddingHorizontal:10,
+                        backgroundColor:Colors.BACKGROUND_WHITE_DOWN
+                    }}
                     value={text}
                     onFocus={onPressSearchButton}
                     onChangeText={(value)=>{setText(value)}}

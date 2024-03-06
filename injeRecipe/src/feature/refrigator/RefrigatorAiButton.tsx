@@ -17,9 +17,7 @@ export function RefrigatorAiButton({postData}:any){
                 setText(res)
                 console.log(res)    
                     const postRecipeData = {
-                        start:0,
-                        end:1,
-                        rcpNm:res
+                        keyword:res
                     }      
                     GET_SERACH_RECIPE(postRecipeData).then((item)=>{
                         

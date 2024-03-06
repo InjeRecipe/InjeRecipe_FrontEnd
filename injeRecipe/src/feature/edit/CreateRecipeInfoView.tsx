@@ -1,10 +1,13 @@
 import React from "react"
-import { Text, View } from "react-native"
+import { SafeAreaView, Text, View } from "react-native"
+import { EditViewHeader } from "./EditViewHeader"
+import { EditInfoBody } from "./EditInfoBody"
 
 export const CreateRecipeInfoView =() => {
     return(
-        <View>
-            <Text>CreateRecipeInfoView</Text>
-        </View>
+        <SafeAreaView>
+            <EditViewHeader next='다음' prev='<'/>
+            <EditInfoBody/>
+        </SafeAreaView>
     )
 }
