@@ -2,6 +2,7 @@ import React from "react"
 import { TextInput, View } from "react-native"
 
 export const InputBox = ({title,value,setValue}:any) => {
+    console.log(title)
     return(
         <View style={{flexDirection:"row"}}>
             <TextInput
@@ -15,7 +16,7 @@ export const InputBox = ({title,value,setValue}:any) => {
                 value={value}
                 onChangeText={(text)=>{setValue(text)}}
                 placeholder={title}
-                secureTextEntry={title=="아이디"?false:true}
+                secureTextEntry={title=="비밀번호"?true:false}
             />
         </View>
     )

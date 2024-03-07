@@ -9,7 +9,7 @@ export const signService = () => {
             console.log(res.data,'02020200202020020202020200')
             return res
         }catch(error){
-            // console.log(error)
+             console.log(error)
         }
     }
 

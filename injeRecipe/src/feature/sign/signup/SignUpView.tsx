@@ -24,6 +24,7 @@ export function SignUpView(){
             nickName:nickName,
             age:age
         }
+        console.log(postData)
           POST_SIGNUP(postData)
          
     }

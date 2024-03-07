@@ -9,7 +9,7 @@ export function SubmitButton({onPressClear}:any){
     const onPressSignUp = () => {
         onPressClear()
             // console.log(res)
-            navigation.navigate('HomeStack',{screen:'SignIn'})    
+            // navigation.navigate('HomeStack',{screen:'SignIn'})    
     }
     return(
         <>
