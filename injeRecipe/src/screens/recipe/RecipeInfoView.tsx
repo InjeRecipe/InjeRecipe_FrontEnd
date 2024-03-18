@@ -15,8 +15,9 @@ export const RecipeInfoView = ({recipeData}:any) => {
     } = useDimention()
     const navigation = useNavigation<any>();
     
-    const dataArray = recipeData.item.RCP_PARTS_DTLS.split(',');
-    console.log('REcipeInfoView ====== ',dataArray)
+    const ingredientArray = recipeData.item.recipe_parts_dtls.split(',');
+    // dataArray는 재료 데이터 들고와야하는데 현재 없어서 대기
+    console.log('REcipeInfoView ====== ',ingredientArray)
     const path = `${recipeData.item.recipe_file_s}`
         function convertToHttps(path:string) {
             if (path.startsWith('http://')) {
@@ -57,11 +58,11 @@ export const RecipeInfoView = ({recipeData}:any) => {
                     </View>
                     <View style={{flex:0.65,flexDirection:'row'}}>
                         <View style={{flex:0.6,justifyContent:"center"}}>
-                            <Text style={{fontSize:20,}}>재료명</Text>
-                            <Text style={{color:Colors.SEPARATED_LINE_TORNUP}}>재료양</Text>
+                            <Text style={{fontSize:20,}}>{ingredientArray[index]}</Text>
+                            
                         </View>
                         <View style={{flex:0.4,justifyContent:"center"}}>
-                            <Text style={{fontSize:16,color:Colors.SEPARATED_LINE_TORNUP}}>168kcal</Text>
+                            
                         </View>
                     </View>
                     
@@ -92,13 +93,13 @@ export const RecipeInfoView = ({recipeData}:any) => {
                         fontSize: 18,
                         fontWeight: "bold",
                         marginTop: 50
-                    }}>{recipeData.item.RCP_NM}</Text>
+                    }}>{recipeData.item.recipe_nm}</Text>
                     <Text style={{
                         fontSize: 14,
                         marginTop: 15,
                         alignSelf: "center",
                         color: Colors.SEPARATED_LINE_TORNUP
-                    }}>{dataArray.length} ingredients</Text>
+                    }}>{ingredientArray.length} ingredients</Text>
                 </View>
                 <View style={{ flex: 0.75, width: '100%' }}>
                     {/* ingredient image section */}
@@ -132,14 +133,16 @@ export const RecipeInfoView = ({recipeData}:any) => {
                 <View style={{ flex: 0.5, width: '100%', alignItems: "center",}}>
                     <Swiper
                         style={{}}
-                        loop={false}
-                        >
+                        loop={false}>
                         {renderingImage.map((item,index)=>{
-                            if(renderingImage.length/2>index){
+                            if(renderingImage.length/2+1>=index){
                             return(
                                 <>
                                 <RenderView index={index*2} keys={index*2}/>
-                                <RenderView index={index*2+1} keys={index*2+1}/>
+                                {index==renderingImage.length&& index%2==0?
+                                    null:<RenderView index={index*2+1} keys={index*2+1}/>
+                                }
+                                
                                 </>
                             )
                             }
@@ -153,46 +156,7 @@ export const RecipeInfoView = ({recipeData}:any) => {
         )
     }
     // 배케이션용 뷰 
-    const VacationView = () => {
-        return(
-            <View style={{
-                flex: 0.6,
-                borderWidth: 1,
-                borderTopWidth: 0,
-                borderColor: Colors.SEPARATED_LINE,
-                backgroundColor: Colors.BACKGROUND_DEFAULT,
-                borderBottomRightRadius: 25,
-                borderBottomLeftRadius: 25,
-                zIndex: 0
-            }}>
-                <View style={{ flex: 0.25, alignItems: "center" }}>
-                    {/* title section (ingredient,name) */}
-                    <Text style={{
-                        fontSize: 18,
-                        fontWeight: "bold",
-                        marginTop: 50
-                    }}>{recipeData.item.RCP_NM}</Text>
-                    <Text style={{
-                        fontSize: 14,
-                        marginTop: 15,
-                        alignSelf: "center",
-                        color: Colors.SEPARATED_LINE_TORNUP
-                    }}>{dataArray.length} ingredients</Text>
-                </View>
-                <View style={{ flex: 0.68, width: '100%', alignItems: "center",}}>
-                    <Text style={{fontSize:22,fontWeight:'bold',marginBottom:22}}>재료 정보</Text>
-                    <FlatList
-                        data={dataArray}
-                        scrollEnabled={false}
-                        renderItem={({item,index}:any)=>{return(
-                            <View style={{width:200,height:25,borderBottomWidth:0.23}}>
-                                <Text>{item}</Text>
-                            </View>)}}
-                    />
-                </View>
-            </View>
-        )
-    }
+    
     return (
         <>
             <View style={{

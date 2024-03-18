@@ -6,15 +6,19 @@ import { Colors } from "../../color/Colors"
 import Icon from "react-native-vector-icons/Ionicons";
 import { useRecommend } from "../../hooks/useRecommend"
 import { RecipeRenderItem } from "./RecipeRenderItem"
+import { useSelector } from "react-redux"
+import { RootReducerState } from "../../redux/store"
+import { KeywordRenderItemView } from "./KeywordRenderItemView"
 
-export const KeyWordRecommendView = ({weatherRecipe}:any) => {
+export const KeyWordRecommendView = () => {
     const {
         sampleData,
         keyWord
     } = useRecommend()
     const [recepeItem, setRecepeItem] = useState<any>(sampleData)
+    const array = new Array(8)
     
-
+    const keywordRecipe = useSelector((state:RootReducerState)=>state.login.keywordRecipe)
     const [isClicked, setIsClicked] = useState(0)
     const onPressKeyWord = (index:any) => {
         setIsClicked(index)
@@ -68,7 +72,7 @@ export const KeyWordRecommendView = ({weatherRecipe}:any) => {
                         data={keyWord}
                         horizontal={true}
                         renderItem={({ item, index }: any) => {
-                            return (<RenderItem item={item} index={index} />)
+                            return (<RenderItem item={item} index={index} value='keyword'/>)
                         }}
                         keyExtractor={(item) => `${item.key}`}
                     />
@@ -80,11 +84,15 @@ export const KeyWordRecommendView = ({weatherRecipe}:any) => {
                             flex: 1,
                             paddingVertical:8
                         }}
+                        bounces={false}
                         horizontal={true}
-                        data={weatherRecipe}
-                        keyExtractor={item => `'`}
+                        data={array}
+                        showsHorizontalScrollIndicator={false}
                         renderItem={({ item, index }) => {
-                            return(<RecipeRenderItem item={item}index={index}/>)
+                            if(index < array.length/2){
+                            return(<KeywordRenderItemView item={item}index={index}/>)
+                            }
+                            else return null
                         }} />
                 </View>
             </View>

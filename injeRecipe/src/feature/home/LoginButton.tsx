@@ -48,22 +48,22 @@ export function LoginButton({text,value}:props){
         }
     }
     return(
-        <Pressable style={{
-            width:"75%",
-            alignItems:"center",
-            justifyContent:"center",
-            height:50,
-            borderRadius:18,
-            backgroundColor:btBgColor,
-            shadowOpacity:1,
-            shadowOffset:{width:0,height:2},
-            flexDirection:'row'
-        }}
-        onPress={onPressLogin}>
+        <Pressable 
+            style={{
+                width:"75%",
+                alignItems:"center",
+                justifyContent:"center",
+                height:50,
+                borderRadius:18,
+                backgroundColor:btBgColor,
+                shadowOpacity:1,
+                shadowOffset:{width:0,height:2},
+                flexDirection:'row'}}
+            onPress={onPressLogin}>
         {btBgColor=='white'?
         <Image 
             style={{width:20,height:20,marginRight:10}}
-        source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/icons/googleIcon.png'}}/>:null}
+            source={{uri:'/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/icons/googleIcon.png'}}/>:null}
             <Text style={{fontSize:22,color:btBgColor=='white'?'black':'white'}}>{text}</Text>
         </Pressable>
     )

@@ -29,12 +29,12 @@ export function SearchBox({searchItem,setSearchItem}:any){
     const focusOutSearch = () =>{
         onPressSearchButton()
         const data = {
-            keyword:text
+            keyword1:text
         }
         console.log(data,'@@@@@@@@@@@@@')
         if(text!=''){
             GET_SERACH_RECIPE(data).then((res:any)=>{
-                console.log('res===========',res.data)
+                console.log('res===========',res)
                 setSearchItem(res.data)
             })
             

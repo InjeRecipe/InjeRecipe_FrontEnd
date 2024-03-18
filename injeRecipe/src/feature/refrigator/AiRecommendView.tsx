@@ -15,6 +15,7 @@ export function AiRecommendView() {
     const route = useRoute();
     const paramData  = route.params;
     const [recipeData,setRecipeData] = useState<any>(paramData)
+    console.log('????????',paramData)
     function convertToHttps(path:string) {
         if (path.startsWith('http://')) {
             return path.replace('http://', 'https://');
@@ -55,7 +56,7 @@ export function AiRecommendView() {
                     <View>
                         <Image 
                         style={{width:150,height:150,borderRadius:75}}
-                        source={{uri:convertToHttps(recipeData.item.ATT_FILE_NO_MAIN)}}/>
+                        source={{uri:'convertToHttps(recipeData.item.recipe_file_s)'}}/>
                     </View>
                 </View>
                 <View style={{
@@ -78,7 +79,7 @@ export function AiRecommendView() {
                                 fontSize:18,
                                 fontWeight:"bold",
                                 marginTop:10
-                                }}>{recipeData.item.RCP_NM}</Text>
+                                }}>{recipeData.item.recipe_nm}</Text>
                             <Text style={{
                                 fontSize:14,
                                 marginTop:5,

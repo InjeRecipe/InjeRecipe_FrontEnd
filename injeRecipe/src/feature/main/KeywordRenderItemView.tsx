@@ -6,9 +6,9 @@ import { useNavigation } from "@react-navigation/core"
 import { useSelector } from "react-redux"
 import { RootReducerState } from "../../redux/store"
 
-export const RecipeRenderItem=({item,index,value}:any) =>{
+export const KeywordRenderItemView=({item,index,value}:any) =>{
     const { getHeight, getWeight } = useDimention()
-    const data: any = useSelector<RootReducerState>((state) => state.login.weatherRecipe)
+    const data: any = useSelector<RootReducerState>((state) => state.login.defaultKrRecipe)
     
     console.log(data)
     function convertToHttps(path:string) {

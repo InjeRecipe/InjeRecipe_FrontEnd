@@ -30,7 +30,24 @@ export const signService = () => {
             // console.log(error)
         }
     }
+
+    const POST_SIGNIN = async({id,pw}:any) =>{
+        console.log('@@@@@@@!!!!',id,pw)
+        try{
+            const serverPath = `${path}/member/sign-in`
+            const res = await axios.post(serverPath,{
+                account:id,
+                password:pw
+            })
+            return res.data.data
+            
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
     return{
-        POST_SIGNUP
+        POST_SIGNUP,
+        POST_SIGNIN
     }
 }

@@ -17,15 +17,12 @@ export function RefrigatorAiButton({postData}:any){
                 setText(res)
                 console.log(res)    
                     const postRecipeData = {
-                        keyword:res
+                        keyword1:res
                     }      
                     GET_SERACH_RECIPE(postRecipeData).then((item)=>{
-                        
-                        const props =item.COOKRCP01.row[0]
-                        
-                        navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:props}})
+                        console.log(item)
+                        navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:item.data}})
                     })
-                
             }) 
     }
     return(

@@ -3,10 +3,10 @@ import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from "react-
 import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 
+
 export const AddItemView = ({ item, index,postData,setPostData }: any) => {
     const { getHeight } = useDimention()
     const [num, setNum] = useState(0)
-    
     const itemImage = item
     const items = item.ingredient.items || []
     const ItemRenderView = ({ item, index }: any) => {
@@ -15,7 +15,7 @@ export const AddItemView = ({ item, index,postData,setPostData }: any) => {
         const onPressItem = () => {
             
             if(!selected){
-                postData.push(item)
+                postData.push(item.value)
                 console.log(postData)
             }
             setSelected(!selected)
@@ -37,7 +37,7 @@ export const AddItemView = ({ item, index,postData,setPostData }: any) => {
                         marginBottom: 5}}
                     onPress={()=>{onPressItem()}}>
                     <Image 
-                        source={{uri:itemImage.ingredient.images[index]}}
+                        source={{uri:item.img}}
                     style={{
                         backgroundColor: selected?Colors.SELECTED_ITEM_BACKGROUND:'white',
                         width: 75,
@@ -47,7 +47,7 @@ export const AddItemView = ({ item, index,postData,setPostData }: any) => {
                         flex: 1,
                         borderRadius: 80,}}/>
                 </TouchableOpacity>
-                <Text>{item}</Text>
+                <Text>{item.value}</Text>
             </View>
         )
     }
@@ -76,6 +76,11 @@ export const AddItemView = ({ item, index,postData,setPostData }: any) => {
                 numColumns={4}
                 renderItem={({ item, index }: any) => {
                     return (<ItemRenderView item={item} index={index}/>)}}/>
+                    {index==4?
+                        <View style={{width:100,height:100}}/>:null
+                    }
+            
+            
         </View>
     )
 }

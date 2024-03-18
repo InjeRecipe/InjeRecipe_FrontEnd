@@ -7,19 +7,18 @@ import { LoginAimButton } from "./LoginAimButton";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { useSignIn } from "../../hooks/useSignIn";
-import { setLoginedUser, setUserWeather, setWeatherRecipe, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
+import { setKeywordRecipe, setLoginedUser, setUserToken, setUserWeather, setWeatherRecipe, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
 import Geolocation from "@react-native-community/geolocation";
 import { weatherService } from "../../services/weatherService";
 import { useWeather } from "../../hooks/useWeather";
 import { chatGptService } from "../../services/chatGptService";
 import { recipeService } from "../../services/recipeService";
 import { sampleData } from "../../data/sampleData";
+import { signService } from "../../services/signService";
 
 export function HomeView() {
     // hooks
     const navigation = useNavigation<any>()
-    const {item} = sampleData()
-    console.log('item==============',item)
     const dispatch = useDispatch()
     const {
         isSignedIn,
@@ -28,8 +27,9 @@ export function HomeView() {
     } = useSignIn()
     // api
     const {POST_WEATHER} = weatherService()
-    const {GET_RECIPE_WEHATER} = chatGptService()
-    const {GET_RECIPE} = recipeService()
+    const {GET_RECIPE_WEHATER,GET_KEYWORD_RECIPE} = chatGptService()
+    const {GET_SERACH_RECIPES,GET_SERACH_RECIPE,} = recipeService()
+    const {POST_SIGNIN} = signService()
     // state
     const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
     const [weather, setWeather] = useState<any>()
@@ -38,7 +38,7 @@ export function HomeView() {
     const [first,setFirst] = useState(0)
     const getIsSignedIn = async () => {
         const result = await isSignedIn()
-        
+        console.log(result)
         setIsSignedInGoogle(result)
     }
 
@@ -46,7 +46,15 @@ export function HomeView() {
         const data = await getCurrentUser()
         
         if(data ==null) setGetCurrentData(false)
-        else {setGetCurrentData(true)
+        else {
+    
+            setGetCurrentData(true)
+            POST_SIGNIN({
+                 id:data.user.email,
+                 pw:'test1234'}).then((res:any)=>{
+                    console.log('@@@@@@@@@@@@@@@@',res)
+                    dispatch(setUserToken(res.token))
+                 })
             dispatch(setLoginedUser(data))}
  
     }
@@ -63,49 +71,67 @@ export function HomeView() {
             console.log('------------',res.weather[0].main) 
             // gpt asked need 
             dispatch(setUserWeather(weather))
-            
+            console.log('weather',weather)
+            // 날씨에 맞는 레시피까지 받아옴
+            getRecipeApi(weather)
+            setTimeout(()=>{navigation.navigate('Bottom')},5000)
         })
-        dispatch(setWeatherRecipe(item))
-        setTimeout(()=>{
-            
-            navigation.navigate('Bottom')
-        },2000)
        })   
       
    }
-   const getRecipeApi = async() => {
-     GET_RECIPE_WEHATER(weather).then((res)=>{
-        //날씨에 따른 레시피 리턴
-        const data = [0,0,0,0,0,0,0,0]
-        dispatch(setWeatherRecommendMenu(res))
-        data.map((item,index)=>{
-            const data = {
-                start:0,
-                end:1,
-                rcpNm:res.menu[index]
-            }
-            setTimeout(() => {
-                GET_RECIPE(data);
-            }, index * 800);  
+   const getRecipeApi = async(weather:any) => {
+     GET_RECIPE_WEHATER(weather).then((res:any)=>{
+        
+        const postData = {
+            keyword1:res.menu[0],
+            keyword2:res.menu[1],
+            keyword3:res.menu[2],
+            keyword4:res.menu[3],
+            keyword5:res.menu[4],
+            keyword6:res.menu[5],
+            keyword7:res.menu[6],
+            keyword8:res.menu[7],
+        }
+        GET_SERACH_RECIPES(postData).then((res:any)=>{
+            console.log("@@@@@@res@@@@@@@",res)
+            dispatch(setWeatherRecipe(res.data))
         })
+
+    })   
+}
+const keywordRecipe = () => {
+    GET_KEYWORD_RECIPE().then((keywordRes)=>{
+    console.log('GET_KEYWORD_RECIPE()',keywordRes)
+    const postData = {
+        keyword1:keywordRes.kr.menu[0],
+        keyword2:keywordRes.kr.menu[1],
+        keyword3:keywordRes.kr.menu[2],
+        keyword4:keywordRes.kr.menu[3],
+        keyword5:keywordRes.kr.menu[4],
+        keyword6:keywordRes.kr.menu[5],
+        keyword7:keywordRes.kr.menu[6],
+        keyword8:keywordRes.kr.menu[7],
+    }
+    GET_SERACH_RECIPES(postData).then((res)=>{
+        dispatch(setKeywordRecipe({
+            data:keywordRes,
+            kr:res.data}))
     })
-    setTimeout(()=>{navigation.navigate('Bottom')},1000)
-   
-   }
-  
+})
+}
     useEffect(() => {
         googleSigninConfigure()
         getIsSignedIn()
+        keywordRecipe()
         if (isSignedInGoogle) {
+            console.log('??')
             getCurrentGoogleUser()
             if(getCurrentData){
-                getNowLocation()
-                // getRecipeApi()
-                // 시간 너무 오래 걸리고 요청 횟수 제한으로 고정값으로 수정하여 발표 진행
-                // 가라 코드      
+                console.log('??')
+                //getNowLocation()    
             }
         }
-    })
+    },[getNowLocation,])
 
     const styles = StyleSheet.create({
         container: {

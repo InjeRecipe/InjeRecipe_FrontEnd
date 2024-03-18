@@ -3,7 +3,7 @@ import { FlatList, Image, Text, View } from "react-native"
 import { useDimention } from "../../hooks/useDimension"
 
 export const RecipebodyView =({recipeData}:any) => {
-    console.log('RecipeBodyView reccipeData' ,recipeData)
+    console.log('RecipeBodyView reccipeData' ,recipeData.item.recipe_images)
     const {getHeight} =useDimention()
    // MANUAL 속성들의 키를 배열로 추출
   // MANUAL 속성과 MANUAL_IMG 속성을 모두 포함한 키들을 추출하여 정렬
@@ -12,8 +12,8 @@ export const RecipebodyView =({recipeData}:any) => {
 const manualArray = [];
 for (let i = 1; i <= 20; i++) {
     const key = `recipe_manual${i.toString().padStart(1)}`;
-    console.log(key)
-    if (recipeData.item.key !== "") {
+    if (recipeData.item[key] != "") {
+        console.log(key , "??222??")
         manualArray.push(recipeData.item[key]);
     }
 }
@@ -21,26 +21,33 @@ for (let i = 1; i <= 20; i++) {
 const manualImgArray = [''];
 for (let i = 1; i <= 20; i++) {
     const key = `recipe_image${i.toString().padStart(1)}`;
-    if (recipeData.item.key !== "") {
+    if (recipeData.item[key] !== "") {
         manualImgArray.push(recipeData.item[key]);
     }
 }
 
 const RecipeBodyRenderItem =({item,index}:any) => {
-    const data = manualImgArray[index+2]
-    
+    const data = recipeData.item.recipe_images[index]
+    console.log(data)
  function convertToHttps(path:string) {
-            if (path.startsWith('http://')) {
+    if(path!= null){
+        if (path.startsWith('http://')) {
                 return path.replace('http://', 'https://');
             } else {
                 return path;
             }
+    }
+            
         }
     return(
         <View style={{height:getHeight()*0.4,alignItems:"center",justifyContent:"center",width:"100%"}}>
             <View style={{width:"100%",alignItems:"center",justifyContent:"center"}}>
                 <Image 
-                    style={{width:'70%',height:200,marginBottom:25}}
+                    style={{
+                        width:'70%',
+                        height:200,
+                        marginBottom:25,
+                        resizeMode:'cover'}}
                     source={{uri:convertToHttps(data)}}/>
             </View>
             <View style={{}}>
@@ -57,7 +64,7 @@ console.log("Manual Image Array:", manualImgArray);
             <FlatList
                 style={{}}
                 scrollEnabled={false}
-                data={manualArray}
+                data={recipeData.item.recipe_manuals}
                 renderItem={({item,index})=>{return(<RecipeBodyRenderItem item={item} index={index}/>)}}
             />
         </View>

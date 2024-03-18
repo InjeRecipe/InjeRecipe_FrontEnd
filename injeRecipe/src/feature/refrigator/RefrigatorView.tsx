@@ -14,13 +14,15 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRefrigator } from "../../hooks/useRefrigator";
 import { AddItemView } from "./AddItemView";
 import { Colors } from "../../color/Colors";
+import { refrigatorItem } from "../../data/refrigatorItem";
   
 export function RefrigatorView(){
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => ['10%', '90%'], []);
     const [isExpanded,setIsExpanded] = useState(true)
-    const {foods} =useRefrigator()
+    const {data} =refrigatorItem()
     const [postData,setPostData] = useState([''])
+    
     // variables
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
@@ -72,6 +74,7 @@ export function RefrigatorView(){
     }
     const ListFooterComponent = () => {
         return(
+            <>
             <View style={{
                 width:'80%',
                 position:'absolute',
@@ -93,6 +96,7 @@ export function RefrigatorView(){
                     </Text>
                 </Pressable>
             </View>
+            </>
         )
     }
     return(
@@ -106,7 +110,7 @@ export function RefrigatorView(){
                 backdropComponent={BackDropView}
                 backgroundStyle={{backgroundColor:"white"}}>
                     <BottomSheetFlatList
-                        data={foods}
+                        data={data}
                         keyExtractor={(item)=>item.ingredient.title}
                         renderItem={({item,index})=>{return(<AddItemView item={item}index={index} postData={postData} setPostData={setPostData}/>)}}
                         ListHeaderComponent={ListHeaderComponent}/>
