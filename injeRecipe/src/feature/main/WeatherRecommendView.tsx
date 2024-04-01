@@ -13,27 +13,32 @@ import { RecipeRenderItem } from "./RecipeRenderItem";
 import { chatGptService } from "../../services/chatGptService";
 import { setWeatherRecipe } from "../../redux/action/actionLogin";
 import { recipeService } from "../../services/recipeService";
-export const WeatherRecommendView = ({weatherRecipem,weatherTitle}:any) => {
+export const WeatherRecommendView = ({weatherRecipem,
+    weatherTitle,
+    setIsLoading
+}:any) => {
     const {GET_NEW_RECIPE} = chatGptService()
-    const {GET_SERACH_RECIPE} = recipeService()
+    const {GET_SERACH_RECIPES} = recipeService()
     const data: any = useSelector<RootReducerState>((state) => state.login.weatherRecipe)
     console.log('WeatherREcommendView Data -========', data)
+    const token = useSelector((state:RootReducerState)=> state.login.userToken)
     const dispatch = useDispatch()
     //const [keyWord,setKeyword] = useState<Array<any>|any>(data.menu) 
     const onPressReset = () => {
-        GET_NEW_RECIPE().then((res:any)=>{
+        GET_NEW_RECIPE(token).then((res:any)=>{
             console.log(res.menu[0])
             const postData = {
-                keyword1:res.menu[0],
-                keyword2:res.menu[1],
-                keyword3:res.menu[2],
-                keyword4:res.menu[3],
-                keyword5:res.menu[4],
-                keyword6:res.menu[5],
-                keyword7:res.menu[6],
-                keyword8:res.menu[7],
+                keywords:[ res.menu[0],
+                res.menu[1],
+                res.menu[2],
+                res.menu[3],
+                res.menu[4],
+                res.menu[5],
+                res.menu[6],
+                res.menu[7],]
+               
             }
-            GET_SERACH_RECIPE(postData).then((res:any)=>{
+            GET_SERACH_RECIPES({data:postData,token:token}).then((res:any)=>{
                 console.log("@@@@@@res@@@@@@@2",res)
                 dispatch(setWeatherRecipe(res.data))
             })
@@ -60,9 +65,9 @@ export const WeatherRecommendView = ({weatherRecipem,weatherTitle}:any) => {
                     horizontal={true}
                     renderItem={({ item, index }) => {
                         console.log('myitem', data.length)
-                        if(item != undefined && index <= data.length/2){
+                        if(item != undefined && index < data.length/2){
                             return (
-                                <RecipeRenderItem item={item}index={index} value='weather'/>
+                                <RecipeRenderItem item={item}index={index} value='weather' setIsLoading={setIsLoading}/>
                             )
                         }
                         else return null
@@ -76,7 +81,7 @@ export const WeatherRecommendView = ({weatherRecipem,weatherTitle}:any) => {
                 alignItems: "center"
             }}>
                 {/* refresh view */}
-                <TouchableOpacity style={{
+                {/* <TouchableOpacity style={{
                     flex: 0.7,
                     borderWidth: 0.8,
                     borderColor: Colors.SEPARATED_LINE_TORNUP,
@@ -91,7 +96,7 @@ export const WeatherRecommendView = ({weatherRecipem,weatherTitle}:any) => {
                         새로운 레시피 가져오기
                     </Text>
                     <Icon name="refresh" size={16} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     );

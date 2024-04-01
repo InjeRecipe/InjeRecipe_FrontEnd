@@ -3,11 +3,13 @@ import { Animated, Keyboard, Pressable, Text, TextInput, View } from "react-nati
 import { Colors } from "../../color/Colors";
 import Icon from 'react-native-vector-icons/Ionicons'
 import { recipeService } from "../../services/recipeService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchRecipe } from "../../redux/action/actionRecipe";
+import { RootReducerState } from "../../redux/store";
 
 export function SearchBox({searchItem,setSearchItem}:any){
     const {GET_SERACH_RECIPE} = recipeService()
+    const token = useSelector((state:RootReducerState)=>state.login.userToken)
     const interpolateAnim = useRef(new Animated.Value(0)).current
     const [text,setText] = useState('')
     const [isExpanded,setIsExpanded] = useState(false)
@@ -29,11 +31,11 @@ export function SearchBox({searchItem,setSearchItem}:any){
     const focusOutSearch = () =>{
         onPressSearchButton()
         const data = {
-            keyword1:text
+            keywords:[text]
         }
-        console.log(data,'@@@@@@@@@@@@@')
+        console.log('??????',token)
         if(text!=''){
-            GET_SERACH_RECIPE(data).then((res:any)=>{
+            GET_SERACH_RECIPE({data,token}).then((res:any)=>{
                 console.log('res===========',res)
                 setSearchItem(res.data)
             })

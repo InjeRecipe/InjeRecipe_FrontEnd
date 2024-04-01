@@ -3,6 +3,7 @@ import { Text, TextInput, View } from "react-native";
 import { Header } from "../../../component/Header";
 import { LoginButton } from "../../home/LoginButton";
 import { Margin } from "../../../component/Margin";
+import { LoadingIndicaotrView } from "../../../component/LoadingIndicatorView";
 
 const InputBox = ({title,value,setValue}:any) => {
     return(
@@ -27,6 +28,7 @@ export function SignInView(){
     const [id,setId] = useState('')
     const [pw,setPw] = useState('')
     
+    
     return(
         <View style={{flex:1,alignItems:"center"}}>
             <Margin height={50}/>
@@ -34,7 +36,8 @@ export function SignInView(){
             <Margin height={5}/>
             <InputBox title="비밀번호" value={pw} setValue={setPw}/>
             <Margin height={50}/>
-            <LoginButton text="로그인" value="inje"/>
+            <LoginButton text="로그인" value="inje" id={id} pw={pw} />
+            
         </View>
     )
 }

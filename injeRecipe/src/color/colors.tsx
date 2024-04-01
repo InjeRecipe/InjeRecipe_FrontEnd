@@ -12,6 +12,7 @@ export const Colors ={
      ITEM_ARROW_GRAY : "#CDCDCD",
      ITEM_BORDER_GRAY : "#636363",
 
+     RECIPENM_INPUT: '#B98639',
      IMAGE_PAGE_ORANGE : "#FF8E4C",
      KCAL_INPUT_BOX:"#9E8C70",
 

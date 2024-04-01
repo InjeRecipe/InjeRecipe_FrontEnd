@@ -2,8 +2,19 @@ import axios from "axios"
 
 export const signService = () => {
     const path = 'http://localhost:8080'
-    const POST_SIGNUP = async(data:any) => {
-        const serverPath = `${path}/signUp`
+    type post = {
+        account:string,
+        password:string,
+        nickname:string,
+        age:number,
+       
+    role: string,
+    socialType: string,
+    socialId: string,
+    imageUrl: string
+    }
+    const POST_SIGNUP = async(data:post) => {
+        const serverPath = `${path}/member/signUp`
         try{
             const res = await axios.post(serverPath,data)
             console.log(res.data,'02020200202020020202020200')
@@ -12,25 +23,6 @@ export const signService = () => {
              console.log(error)
         }
     }
-
-    const OAUTH_SIGNUP = async() => {
-        const serverPath = `${path}/oauth/signUp`
-        const data = {
-            account:'',
-            name:'',
-            email:'',
-            socalType:'',
-            imageUrl:'',
-        }
-        try{
-            const res = await axios.post(serverPath,data)
-            console.log(res.data,'02020200202020020202020200')
-            return res
-        }catch(error){
-            // console.log(error)
-        }
-    }
-
     const POST_SIGNIN = async({id,pw}:any) =>{
         console.log('@@@@@@@!!!!',id,pw)
         try{
@@ -39,6 +31,7 @@ export const signService = () => {
                 account:id,
                 password:pw
             })
+            console.log(res.data)
             return res.data.data
             
         }

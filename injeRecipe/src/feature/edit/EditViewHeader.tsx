@@ -1,23 +1,51 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
 import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native"
+import { recipeService } from "../../services/recipeService"
+import { useSelector } from "react-redux"
+import { RootReducerState } from "../../redux/store"
+import { useConvert } from "../../hooks/useConvert"
+import { useRecipe } from "../../hooks/useReipce"
 export const EditViewHeader = ({prev,next}:any) => {
     const { getHeight } = useDimention()
     const navigation = useNavigation<any>()
+    const {POST_RECIPE_UPLOAD} = recipeService()
+    const token = useSelector((state:RootReducerState)=>state.login.userToken)
+    const userName = useSelector((state:RootReducerState)=>state.login.loginUser.user.name)
+    const {
+        convertArraytoText,
+        convertObjectToArray} = useConvert()
+    const {recipePostData,setRecipeSeq} = useRecipe()
+    console.log("userName",userName)
     const onPressNext = () => {
+       
         if(next=='다음'){
             navigation.navigate('EditStack',{screen:"EditView"})
         }
         else{
-            navigation.navigate('Bottom')
+            convertArraytoText(recipePostData)
+            convertObjectToArray(recipePostData)
+            recipePostData.recipeImages.shift()
+            setRecipeSeq(userName)
+            console.log(recipePostData)
+            POST_RECIPE_UPLOAD({
+                data:recipePostData,
+                token:token
+            }).then(()=>{
+                navigation.navigate('Bottom') 
+            })
+            
         }
     }
     const onPressPrev = () => {
         navigation.pop()
     }
+    useEffect(()=>{
+        console.log("@@@@@@@@@@@????????")
+    },[])
     return (
         <View style={{ 
             height: getHeight() * 0.06,

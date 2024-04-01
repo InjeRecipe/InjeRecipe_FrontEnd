@@ -14,6 +14,8 @@ import { WeatherRecommendView } from "./WeatherRecommendView";
 import { KeyWordRecommendView } from "./KeyWordRcommendView";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/core";
+import { UserRecipeView } from "./UserRecipeView";
+import { LoadingIndicaotrView } from "../../component/LoadingIndicatorView";
 
 export function MainView() {
 
@@ -27,7 +29,7 @@ export function MainView() {
     const [weatherTitle,setWeatherTitle] = useState<string|any> ('')
     const weather = useSelector((state: RootReducerState) => state.login.userWeather)
     const weatherRecipe = useSelector((state: RootReducerState) => state.login.weatherRecipe)
-
+    const [isLoding,setIsLoading] = useState(false)
 
     useEffect(() => {
         console.log(weather)
@@ -97,6 +99,7 @@ export function MainView() {
         )
     }
     return (
+        <>
         <View style={{
             flex: 1,
             backgroundColor: Colors.BACKGROUND_DEFAULT,
@@ -111,7 +114,10 @@ export function MainView() {
                 style={{ flex: 0.95, }}
                 bounces={false}
                 onScroll={handleScroll}
-                scrollEventThrottle={1}>
+                scrollEventThrottle={1}
+                showsVerticalScrollIndicator={false}
+                >
+                
                 <Animated.View
                     style={{
                         opacity: fadeAnim,
@@ -127,9 +133,9 @@ export function MainView() {
                         flexDirection: 'row',
                         paddingVertical: 30
                     }}>
-                        <View style={{ backgroundColor: bgColor, width: '100%', borderRadius: 20 }}>
+                        <View style={{ backgroundColor: bgColor, width: '100%', borderRadius: 20,justifyContent:"center" }}>
                             <LottieView
-                                style={{ width: 100, height: 120, }}
+                                style={{ width: 260, height: 260,position:"absolute",left:-20, }}
                                 autoPlay
                                 source={{ uri: imageUri }} />
                         </View>
@@ -146,18 +152,30 @@ export function MainView() {
                         </Text>
                     </View>
                 </Animated.View>
-                <View style={{ height: 625, borderBottomWidth: 0.8, borderColor: Colors.SEPARATED_LINE_TORNUP }}>
+                <View style={{ height: 585, borderBottomWidth: 0.8, borderColor: Colors.SEPARATED_LINE_TORNUP }}>
                     <WeatherRecommendView 
                         weatherRecipe={weatherRecipe} 
-                        weatherTitle={weatherTitle} />
+                        weatherTitle={weatherTitle}
+                        setIsLoading={setIsLoading}
+                         />
                 </View>
                 <View style={{ height: 650, borderColor: Colors.SEPARATED_LINE_TORNUP, borderBottomWidth: 0.8 }}>
-                    <KeyWordRecommendView/>
+                    <KeyWordRecommendView
+                    setIsLoading={setIsLoading}
+                    />
+                </View>
+                <View style={{ height: 400, borderColor: Colors.SEPARATED_LINE_TORNUP, borderBottomWidth: 0.8 }}>
+                    <UserRecipeView
+                    setIsLoading={setIsLoading}
+                    
+                    />
                 </View>
             </ScrollView>
 
 
         </View>
+        {isLoding?<LoadingIndicaotrView text='레시피 확인중...'/>:null}
+        </>
     )
 }
 

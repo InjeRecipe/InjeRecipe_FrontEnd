@@ -10,6 +10,7 @@ import { ProfileImage } from "./ProfileImage";
 import { signService } from "../../../services/signService";
 
 
+
 export function SignUpView(){
     const [id,setId] = useState('')
     const [pw,setPw] = useState('')
@@ -21,8 +22,13 @@ export function SignUpView(){
         const postData = {
             account:id,
             password:pw,
-            nickName:nickName,
-            age:age
+            nickname:nickName,
+            age:Number(age),
+           
+  role: "GUEST",
+  socialType: "KAKAO",
+  socialId: "string",
+  imageUrl: "string"
         }
         console.log(postData)
           POST_SIGNUP(postData)
@@ -31,7 +37,7 @@ export function SignUpView(){
     return(
         <View style={{flex:1,alignItems:"center"}}>
             <Margin height={50}/>
-            <ProfileImage setImage={setImage}/>
+            {/* <ProfileImage setImage={setImage}/> */}
             <Margin height={50}/>
             <InputBox title="아이디" value={id} setValue={setId}/>  
             <Margin height={8}/>

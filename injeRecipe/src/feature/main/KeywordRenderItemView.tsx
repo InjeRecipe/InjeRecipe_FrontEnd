@@ -5,16 +5,29 @@ import { Colors } from "../../color/Colors"
 import { useNavigation } from "@react-navigation/core"
 import { useSelector } from "react-redux"
 import { RootReducerState } from "../../redux/store"
+import { recipeService } from "../../services/recipeService"
+import { useConvert } from "../../hooks/useConvert"
 
-export const KeywordRenderItemView=({item,index,value}:any) =>{
+export const KeywordRenderItemView=({
+    item,
+    index,
+    setIsLoading,
+    value}:any) =>{
     const { getHeight, getWeight } = useDimention()
     const data: any = useSelector<RootReducerState>((state) => state.login.defaultKrRecipe)
-    
-    console.log(data)
+    const {POST_IMAGE_SEARCH} = recipeService()
+    const {converTextToArray} = useConvert()
+    const token:any = useSelector<RootReducerState>((state) => state.login.userToken)
+    // console.log(data)
     function convertToHttps(path:string) {
-        if (path.startsWith('http://')) {
+        console.log(path)
+        if (path == null){
+            return '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/nullRecipeImage.png'
+        }
+        else if (path.startsWith('http://')) {
             return path.replace('http://', 'https://');
-        } else {
+        }
+        else {
             return path;
         }
     }
@@ -22,10 +35,27 @@ export const KeywordRenderItemView=({item,index,value}:any) =>{
     const ItemView = ({num}:any) => {
         const navigation = useNavigation<any>()
     const onPressRecipe = () => {
+        setIsLoading(true)
         const item = data[num]
-        navigation.navigate('RecipeView',{item})
+        if(item.recipe_parts_dtls!= null){
+            const postData = converTextToArray(item.recipe_parts_dtls)
+            
+            POST_IMAGE_SEARCH({
+                data:postData,
+                token:token
+            }).then((res)=>{
+                if(postData[0] == '재료'){postData.shift();res.data.shift()}
+        
+                setIsLoading(false)
+                navigation.navigate('RecipeView',{item,res,postData})
+            })
+        }
+        else{
+            setIsLoading(false)
+            navigation.navigate('RecipeView',{item})
+        }
     }
-        // console.log(data[num])
+        console.log("@@@@@@@",data[num])
         if(data[num]!= undefined){
             return(
                 <TouchableOpacity style={{flex:1,}} onPress={onPressRecipe}>

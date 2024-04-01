@@ -18,7 +18,7 @@ export const InfoHeader =()=>{
             <Text style={{fontSize:18,fontWeight:'bold',color:Colors.FONT_WHITE}}>더보기</Text>
             </View>
             <View>
-            <Icon name="list"size={16} color={Colors.FONT_WHITE}/>
+            {/* <Icon name="list"size={16} color={Colors.FONT_WHITE}/> */}
             </View>
             
         </View>

@@ -51,7 +51,7 @@ export const refrigatorItem = () => {
                     },
                     {
                         value: '고추',
-                        img: '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/icons/refrigatorItem/peppericon.png'
+                        img: '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/icons/refrigatorItem/perpper.png'
                     },
                     {
                         value: '오이',

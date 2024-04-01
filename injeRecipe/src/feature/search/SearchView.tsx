@@ -6,6 +6,7 @@ import { useDimention } from "../../hooks/useDimension";
 import { SearchBox } from "./SearchBox";
 import { Margin } from "../../component/Margin";
 import { SearchBody } from "./SearchBody";
+import { LoadingIndicaotrView } from "../../component/LoadingIndicatorView";
 
 
 export function SearchView(){
@@ -13,6 +14,7 @@ export function SearchView(){
     const height = getHeight()
     const [text,setText] = useState('')
     const [searchItem,setSearchItem] = useState()
+    const [isLoding,setIsLoading] = useState(false)
     return(
         // <TouchableWithoutFeedback
         // style={{backgroundColor:'yellow'}} 
@@ -30,9 +32,9 @@ export function SearchView(){
             </View>
             
             <View style={{flex:1,width:'100%'}}>
-                <SearchBody searchItem={searchItem} setSearchItem={setSearchItem}/>
+                <SearchBody searchItem={searchItem} setSearchItem={setSearchItem} setIsLoading={setIsLoading}/>
             </View>
-            
+            {isLoding?<LoadingIndicaotrView/>:null}
         </SafeAreaView>
         
     )

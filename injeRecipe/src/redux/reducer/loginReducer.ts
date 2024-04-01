@@ -1,5 +1,5 @@
 
-import { SET_KEYWORD_RECIPE, SET_LOGINED_USER, SET_USER_TOKEN, SET_USER_WEATHER, SET_WEATHER_RECIPE, SET_WEATHER_RECOMMEND_MENU } from "../action/actionLogin"
+import { SET_KEYWORD_RECIPE, SET_LOGINED_USER, SET_USER_TOKEN, SET_USER_UPLOAD_BOARD, SET_USER_WEATHER, SET_WEATHER_RECIPE, SET_WEATHER_RECOMMEND_MENU } from "../action/actionLogin"
 
 const data ={
     loginUser:null,
@@ -8,7 +8,8 @@ const data ={
     weatherRecipe:null,
     defaultKrRecipe:null,
     keywordRecipe:null,
-    userToken:null
+    userToken:null,
+    userUploadRecipe:null
 }
 export const loginReducer = (state = data,action:any) =>{
     
@@ -58,12 +59,19 @@ export const loginReducer = (state = data,action:any) =>{
         }
         case SET_USER_TOKEN:{
             //로그인시 사용자 토큰 저장
+            
             return{
                 ...state,
                 userToken:action.data
             }
         }
-
+        case SET_USER_UPLOAD_BOARD:{
+            //사용자가 직접 제작한 레시피 저장
+            return{
+                ...state,
+                userUploadRecipe:action.data
+            }
+        }
     }
     return {...state}
 }

@@ -6,17 +6,41 @@ import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 import Icon  from "react-native-vector-icons/Ionicons"
 import { useNavigation } from "@react-navigation/core"
+import { recipeService } from "../../services/recipeService"
+import { useConvert } from "../../hooks/useConvert"
 
-export const SearchBody = ({searchItem, setSearchItem}:any) => {
+export const SearchBody = ({searchItem, setSearchItem,setIsLoading}:any) => {
     const {getHeight} = useDimention()
     // const data = useSelector((state:RootReducerState)=>state.recipe.searchRecipe)
 //    const [renderData, setRenderData] = useState<any>(data)
     const navigation = useNavigation<any>()
+    const {POST_IMAGE_SEARCH} = recipeService()
+    const {converTextToArray} = useConvert()
+    const data: any = useSelector<RootReducerState>((state) => state.login.weatherRecipe)
+    const token:any = useSelector<RootReducerState>((state) => state.login.userToken)
     const RenderItem = ({item,index}:any) => {
         const path = `${item.recipe_file_s}`
         
         const onPressSearchItem = () => {
+            setIsLoading(true)
+            
+            console.log(item.recipe_parts_dtls)
+            if(item.recipe_parts_dtls!= null){
+            const postData = converTextToArray(item.recipe_parts_dtls)
+            
+            POST_IMAGE_SEARCH({
+                data:postData,
+                token:token
+            }).then((res)=>{
+                if(postData[0] == '재료'){postData.shift();res.data.shift()}
+                setIsLoading(false)
+                navigation.navigate('RecipeView',{item,res,postData})
+            })
+        }
+        else{
+            setIsLoading(false)
             navigation.navigate('RecipeView',{item})
+        }
         }
         function convertToHttps(path:string) {
             if (path.startsWith('http://')) {

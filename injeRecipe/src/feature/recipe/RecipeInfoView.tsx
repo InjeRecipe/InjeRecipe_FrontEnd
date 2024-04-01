@@ -1,64 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { useDimention } from "../../hooks/useDimension";
-import { useNavigation } from "@react-navigation/core";
+
 import { Colors } from "../../color/Colors";
-import  Icon  from "react-native-vector-icons/Ionicons";
+
 import Swiper from "react-native-swiper";
 
 
 export const RecipeInfoView = ({recipeData}:any) => {
-    
     const {
         getHeight,
         getWeight
     } = useDimention()
-    const navigation = useNavigation<any>();
     
-    const ingredientArray = recipeData.item.recipe_parts_dtls.split(',');
+    const [renderingImage, setRenderingImage] = useState<Array<string>>(recipeData.postData)
+    const convertStringData = (string:any) => {
+       
+            const replacedString = string.replace(/\n/g, ',');
+        return replacedString
+        
+    }
+
+    const ingredientArray = convertStringData(recipeData.item.recipe_parts_dtls).split(',');
     // dataArray는 재료 데이터 들고와야하는데 현재 없어서 대기
-    console.log('REcipeInfoView ====== ',ingredientArray)
     const path = `${recipeData.item.recipe_file_s}`
         function convertToHttps(path:string) {
-            if (path.startsWith('http://')) {
+            if ( path == null) {
+                return ''
+            } 
+            else if (path.startsWith('http://')) {
                 return path.replace('http://', 'https://');
-            } else {
+            }
+            
+            else {
                 return path;
             }
         }
-    const [dishName, setDishName] = useState('제육복음')
-    const [ingredientAmount, setIngredientAmount] = useState('15')
-    const [renderingImage, setRenderingImage] = useState<Array<string>>([
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes01.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes03.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-        '/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/main/dishes02.jpeg',
-    
         
-    ])
-    const onPressBackArrow = () => {
-        navigation.pop()
-    }
+   
+    
+    
     const RenderView = ({index,keys}:any) => {
         // console.log('--------')
         // console.log(index)
         return(
             <View
-                key={`${keys}`}
-                style={{width:'100%',flex:0.39,flexDirection:'row',paddingHorizontal:20}}>
+                
+                style={{width:'85%',flex:0.39,flexDirection:'row',paddingHorizontal:20,alignSelf:"center"}}>
                     <View style={{flex:0.35,width:'100%',alignItems:"center",justifyContent:"center"}}>
                         {/* image view */}
-                        <Image source={{uri:renderingImage[index]}} 
-                        style={{width:'75%',height:getHeight()*0.1,borderRadius:15}}/>
+                        <Image source={{uri:recipeData.res.data[index]==null?`/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/nullRecipeImage.png`:recipeData.res.data[index]}} 
+                        style={{width:'100%',height:'100%',borderRadius:15,resizeMode:'center'}}/>
                     </View>
                     <View style={{flex:0.65,flexDirection:'row'}}>
                         <View style={{flex:0.6,justifyContent:"center"}}>
-                            <Text style={{fontSize:20,}}>{ingredientArray[index]}</Text>
+                            <Text style={{fontSize:20,}}>{renderingImage[index]}</Text>
                             
                         </View>
                         <View style={{flex:0.4,justifyContent:"center"}}>
@@ -69,8 +65,19 @@ export const RecipeInfoView = ({recipeData}:any) => {
             </View>
         )
     }
+
     //  재료가 포함된 뷰 졸작때 활용
     const TestView = () => {
+        const NextButton = () => {
+            return(
+                <Text style={{fontSize:50,color:Colors.SELECTED_ITEM_BACKGROUND}}>{`>`}</Text>
+            )
+        }
+        const PrevButton = () => {
+            return(
+                <Text style={{fontSize:50,color:Colors.SELECTED_ITEM_BACKGROUND}}>{`<`}</Text>
+            )
+        }
         return(
             <>
             <View style={{
@@ -85,21 +92,20 @@ export const RecipeInfoView = ({recipeData}:any) => {
                 zIndex: 1,
                 borderRadius: 10,
                 alignItems: "center",
-
             }}>
                 <View style={{ flex: 0.35, justifyContent: "center", alignItems: "center" }}>
                     {/* title section (ingredient,name) */}
                     <Text style={{
                         fontSize: 18,
                         fontWeight: "bold",
-                        marginTop: 50
+                        marginTop: 40
                     }}>{recipeData.item.recipe_nm}</Text>
                     <Text style={{
                         fontSize: 14,
                         marginTop: 15,
                         alignSelf: "center",
                         color: Colors.SEPARATED_LINE_TORNUP
-                    }}>{ingredientArray.length} ingredients</Text>
+                    }}>{renderingImage.length} ingredients</Text>
                 </View>
                 <View style={{ flex: 0.75, width: '100%' }}>
                     {/* ingredient image section */}
@@ -113,7 +119,7 @@ export const RecipeInfoView = ({recipeData}:any) => {
                             return (
                                 <Image
                                     style={{ width: 55, height: 55, borderRadius: 10, marginRight: 9.1 }}
-                                    source={{ uri: item }} />
+                                    source={{ uri: recipeData.res.data[index]==null?`/Users/kjm/Projects/capston/FE/InjeRecipe_FrontEnd/injeRecipe/src/assets/images/nullRecipeImage.png`:recipeData.res.data[index] }} />
                             )}
                             else return(null)
                         }} />
@@ -132,10 +138,16 @@ export const RecipeInfoView = ({recipeData}:any) => {
                 <View style={{ flex: 0.3, }}/>
                 <View style={{ flex: 0.5, width: '100%', alignItems: "center",}}>
                     <Swiper
-                        style={{}}
-                        loop={false}>
+                        style={{paddingTop:25}}
+                        loop={false}
+                        showsPagination={false}
+                        nextButton={<NextButton/>}
+                        prevButton={<PrevButton/>}
+                        showsButtons={true}
+                        >
                         {renderingImage.map((item,index)=>{
-                            if(renderingImage.length/2+1>=index){
+                            console.log("rerwerw",renderingImage.length)
+                            if(renderingImage.length/2>index){
                             return(
                                 <>
                                 <RenderView index={index*2} keys={index*2}/>
@@ -158,7 +170,7 @@ export const RecipeInfoView = ({recipeData}:any) => {
     // 배케이션용 뷰 
     
     return (
-        <>
+            <>
             <View style={{
                 borderWidth: 1,
                 borderBottomWidth: 0,
@@ -170,17 +182,7 @@ export const RecipeInfoView = ({recipeData}:any) => {
                 alignItems: "center",
                 justifyContent: "center"
             }}>
-                <View style={{flex:0.28,
-                
-                paddingHorizontal:20,
-                flexDirection:"column",
-                width:'100%'
-                }}>
-                    <View style={{flex:0.8}}/>
-                    <Pressable onPress={onPressBackArrow}>
-                    <Icon name='chevron-back' size={26} color={Colors.SEPARATED_LINE_TORNUP}></Icon>
-                    </Pressable>
-                </View>
+               
                 <View style={{flex:0.72,}}>
                     <Image
                         style={{ width: 150, height: 150, borderRadius: 75, }}
@@ -188,7 +190,8 @@ export const RecipeInfoView = ({recipeData}:any) => {
                 </View>
             </View>
             <TestView/>
-            
-        </>
+            </>
+
+
     )
 }

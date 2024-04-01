@@ -1,87 +1,92 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FlatList, Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { useDimention } from "../../hooks/useDimension"
 import { Colors } from "../../color/Colors"
 import Icon from "react-native-vector-icons/Ionicons";
 import { Margin } from "../../component/Margin";
-import { launchImageLibrary } from "react-native-image-picker";
+import { useRecipe } from "../../hooks/useReipce";
 
-export const EditInfoBody = () => {
+
+export const EditInfoBody = ({
+    
+}:any) => {
     const { getWeight, getHeight } = useDimention()
+    const {
+        setRecipePartsDtls,
+        setRecipeNm,
+    setRecipeEng
+    } = useRecipe()
     const [kcalText, setKcalText] = useState('')
-    const [ingredientText, setIngredientText] = useState([{ id: 1, value: '' }]);
-    const [ingredientData, setIngredientData] = useState<Array<any>>([''])
-    const [ingredientWeight, setIngredientWeight] = useState(0)
-    const [mainImage, setMainImage] = useState('')
-
-    const onPressImagePicker = () => {
-        launchImageLibrary({
-            mediaType: "photo",
-        }, (response: any) => {
-            if (response) setMainImage(response.assets[0].uri)
-        })
-    }
+    const [recipeNameText, setRecipeNameText] = useState('')
+    const [ingredientText, setIngredientText] = useState([{ id: 1, value: 0, title:'' }]);
     const onPressAddIngrediant = () => {
         const newId = ingredientText[ingredientText.length - 1].id + 1;
-        setIngredientText(prevInputs => [...prevInputs, { id: newId, value: '' }]);
+        setIngredientText((prevInputs:any) => [...prevInputs, { id: newId, title: '',value:0 }]);
     }
     const handleTextChange = (id: any, text: any) => {
-        setIngredientText(prevInputs =>
-            prevInputs.map(input =>
-                input.id === id ? { ...input, value: text } : input
+        setIngredientText((prevInputs:any) =>
+            prevInputs.map((input:any) =>
+                input.id === id ? { ...input, title: text,  } : input
+            )
+        );
+        setRecipePartsDtls(ingredientText)
+    };
+    const handleWeightChange = (id: any,) => {
+        setIngredientText((prevInputs:any) =>
+            prevInputs.map((input:any) =>
+                input.id === id ? { ...input, value: input.value+5 } : input
             )
         );
     };
-    const RecipeProfileView = () => {
-        return (
-            <View style={{ padding: 20 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        borderBottomWidth: 0.5,
-                        borderBottomColor: Colors.ITEM_BORDER_GRAY,
-                        marginBottom: 15,
-                        height: 30,
-                    }}>
-                       
-                            <Text
-                                style={{
-                                    marginRight: 5,
-                                    color: Colors.BUTTON_SIGNIN,
-                                    fontWeight: 'bold',
-                                }}>레시피 대표 이미지를 정해주세요</Text>
-                            <Icon name="fast-food-outline" size={16} color={Colors.BUTTON_SIGNUP} />
-                       
-                  
-                </View>
-                <Pressable 
-                     onPress={onPressImagePicker}
-                style={{
-                    borderWidth: 1,
-                    alignSelf: "center",
-                    width: getWeight() * 0.34,
-                    height: getHeight() * 0.15,
-                    borderRadius: 75,
-                    marginTop: 20,
-                    borderColor: Colors.ITEM_ARROW_GRAY,
-                    backgroundColor: Colors.SEPARATED_LINE,
-                    justifyContent: "center",
-                    alignItems: "center",
+   useEffect(()=>{
+    setRecipeNm(recipeNameText)
+   },[recipeNameText])
+   useEffect(()=>{
+    setRecipeEng(kcalText)
+   },[kcalText])
+    
+   
+    return (
+        <>
+            <View style={{ height: getHeight() * 0.18, padding: 20 }}>
+                <View style={{
+                    flexDirection: "row", borderBottomWidth: 0.5,
+                    borderBottomColor: Colors.ITEM_BORDER_GRAY,
+                    height: 30,
                 }}>
-                     {mainImage == '' ?
-                    <Icon name="add" size={16} color={Colors.ITEM_BORDER_GRAY} />:
-                    <Image 
-                        source={{ uri:mainImage}} 
+                    <Text
                         style={{
-                            width: getWeight() * 0.34,
-                            height: getHeight() * 0.15,
-                            borderRadius:75}}/>}
-                </Pressable>
+                            marginRight: 5,
+                            color: Colors.BUTTON_SIGNIN,
+                            fontWeight: 'bold'
+                        }}>레시피 이름을 입력 해주세요</Text>
+                    <Icon name="fast-food-outline" size={16} color={Colors.BUTTON_SIGNUP} />
+                </View>
+                <View style={{
+                    backgroundColor: Colors.RECIPENM_INPUT,
+                    borderRadius: 20,
+                    marginTop: 20,
+                    height: '45%',
+                    flexDirection: 'row',
+                    alignItems: "center",
+                    justifyContent: "center"
+                }}>
+                    <TextInput
+                        value={recipeNameText}
+                        onChangeText={(value) => { 
+                            setRecipeNameText(value)      
+                         }}
+                        style={{
+                            width: "60%",
+                            color: Colors.FONT_WHITE
+                        }}
+                        placeholder="레시피 이름을 입력 해주세요."
+                        textAlign={'center'}
+                        placeholderTextColor={Colors.FONT_WHITE}
+                    />
+                </View>
             </View>
-        )
-    }
-    const KcalInputView = () => {
-        return (
+            
             <View style={{ height: getHeight() * 0.18, padding: 20 }}>
                 <View style={{
                     flexDirection: "row", borderBottomWidth: 0.5,
@@ -107,7 +112,10 @@ export const EditInfoBody = () => {
                 }}>
                     <TextInput
                         value={kcalText}
-                        onChangeText={(value) => { setKcalText(value) }}
+                        onChangeText={(value) => { 
+                            setKcalText(value)
+                            
+                         }}
                         style={{
                             width: "60%",
                             color: Colors.FONT_WHITE
@@ -116,32 +124,10 @@ export const EditInfoBody = () => {
                         textAlign={'center'}
                         placeholderTextColor={Colors.FONT_WHITE}
                     />
-                    <Text style={{ color: Colors.FONT_WHITE }}>kcal</Text>
+                    <Text>kcal</Text>
                 </View>
             </View>
-        )
-    }
-    // const RenderItem = ({ item, index }: any) => {
-    //     console.log(item)
-    //     return (
-
-    //     )
-
-    // }
-    // const IngradientView = () => {
-    //     const testData = [0, 0, 0, 1]
-
-    //     return (
-
-    //     )
-    // }
-    return (
-        <ScrollView
-            bounces={false}
-            showsVerticalScrollIndicator={false}>
-            <RecipeProfileView />
-            <KcalInputView />
-
+            
             <View style={{ padding: 20 }}>
                 <View style={{
                     flexDirection: "row", borderBottomWidth: 0.5,
@@ -168,6 +154,7 @@ export const EditInfoBody = () => {
                         bounces={false}
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item, index }: any) => {
+                            console.log(index)
                             return (
                                 <View style={{
                                     width: getWeight() * 0.8,
@@ -183,7 +170,7 @@ export const EditInfoBody = () => {
                                     <View style={{ flex: 0.6, alignItems: "center", justifyContent: "center" }}>
                                         <TextInput
                                             style={{}}
-                                            value={item.value}
+                                            value={item.title}
                                             blurOnSubmit={false}
                                             placeholder="재료 정보를 입력해주세요"
                                             onChangeText={(value) => { handleTextChange(item.id, value) }}
@@ -199,10 +186,12 @@ export const EditInfoBody = () => {
                                                 justifyContent: "center",
                                                 marginRight: 5,
                                                 backgroundColor: Colors.ITEM_ARROW_GRAY
-                                            }}>
+                                            }}
+                                            onPress={()=>{handleWeightChange(item.id)}}
+                                            >
                                             <Text>+</Text>
                                         </TouchableOpacity>
-                                        <Text>{ingredientWeight}g</Text>
+                                        <Text>{ingredientText[index].value}g</Text>
                                         <TouchableOpacity
                                             style={{
                                                 borderRadius: 15,
@@ -237,6 +226,6 @@ export const EditInfoBody = () => {
 
             </View>
             <Margin height={50} />
-        </ScrollView>
+        </>
     )
 }

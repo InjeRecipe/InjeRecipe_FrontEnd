@@ -3,7 +3,10 @@ import { Animated, Pressable, Text, View } from "react-native";
 import { LoginButton } from "./LoginButton";
 import { Margin } from "../../component/Margin";
 
-export function LoginAimButton({ LoginIsExpanded, setLoginIsExpanded }: any) {
+export function LoginAimButton({ 
+    LoginIsExpanded,
+     setLoginIsExpanded,
+     }: any) {
     const interpolate = useRef(new Animated.Value(0)).current
     const onPressClick = () => {
         Animated.timing(interpolate, {

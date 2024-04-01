@@ -4,6 +4,7 @@ export const SET_WEATHER_RECOMMEND_MENU = "SET_WEATHER_RECOMMEND_MENU"
 export const SET_WEATHER_RECIPE = "SET_WEATHER_RECIPE"
 export const SET_KEYWORD_RECIPE = "SET_KEYWORD_RECIPE"
 export const SET_USER_TOKEN = "SET_USER_TOKEN"
+export const SET_USER_UPLOAD_BOARD = "SET_USER_UPLOAD_BOARD"
 
 export const setLoginedUser = (data:any) =>{
     console.log(data)
@@ -46,8 +47,16 @@ export const setKeywordRecipe = ({data,kr}:any) => {
 }
 
 export const setUserToken = (data:any) => {
+    
     return{
         type:SET_USER_TOKEN,
+        data:data
+    }
+}
+
+export const setUserUploadBoard = (data:any) => {
+    return {
+        type:SET_USER_UPLOAD_BOARD,
         data:data
     }
 }

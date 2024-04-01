@@ -1,6 +1,6 @@
 export const useWeather = () =>{
     const weatherMessage = {
-        snow:'눈이 오는데 \n 다음과 같은 \nn레시피는 어떤가요?',
+        snow:'눈이 오는데 \n 다음과 같은 \n레시피는 어떤가요?',
         cloud:'날도 흐린데 \n다음과 같은 \n레시피는 어떤가요?',
         rain:'비도 오는데 \n다음과 같은 \n레시피는 어떤가요?',
         clear:'날씨가 맑은데 \n다음과 같은 \n레시피는 어떤가요?'

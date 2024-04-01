@@ -22,7 +22,7 @@ export function RefrigatorItemView ({postData}:any){
                 })
             })
         })
-    })
+    },[])
     
     return(
         <View style={{flex:1}}>

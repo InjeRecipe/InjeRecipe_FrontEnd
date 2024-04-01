@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { RefrigatorHeader } from "./RefrigatorHeader";
 import { RefrigatorAiButton } from "./RefrigatorAiButton";
@@ -22,7 +22,7 @@ export function RefrigatorView(){
     const [isExpanded,setIsExpanded] = useState(true)
     const {data} =refrigatorItem()
     const [postData,setPostData] = useState([''])
-    
+    const {selectedIndex} = useRefrigator()
     // variables
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
@@ -35,6 +35,7 @@ export function RefrigatorView(){
         console.log(isExpanded)
         setIsExpanded(!isExpanded)
     };
+   
     const BackDropView = () => {
         return(
             <SafeAreaView style={{flex:1}}>
@@ -112,8 +113,18 @@ export function RefrigatorView(){
                     <BottomSheetFlatList
                         data={data}
                         keyExtractor={(item)=>item.ingredient.title}
-                        renderItem={({item,index})=>{return(<AddItemView item={item}index={index} postData={postData} setPostData={setPostData}/>)}}
-                        ListHeaderComponent={ListHeaderComponent}/>
+                        renderItem={({item,index})=>{
+                            console.log(item.ingredient)
+                            return(
+                        <AddItemView 
+                            selectedIndex={selectedIndex}
+                            item={item}
+                            index={index}
+                            postData={postData}
+                            setPostData={setPostData}
+                            
+                            />)}}
+                            ListHeaderComponent={ListHeaderComponent}/>
                    <ListFooterComponent/>
                 </BottomSheet>
         </BottomSheetModalProvider>

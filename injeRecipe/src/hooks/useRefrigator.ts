@@ -1,3 +1,4 @@
+const selectedIndex = [null]
 export const useRefrigator = () => {
     const foods = [
         {
@@ -89,8 +90,11 @@ export const useRefrigator = () => {
             }
         },
     ]
+    
     return {
         foods,
-        foods2
+        foods2,
+        selectedIndex
+
     }
 }
