@@ -3,11 +3,13 @@ import { Animated, Keyboard, Pressable, Text, TextInput, View } from "react-nati
 import { Colors } from "../../color/Colors";
 import Icon from 'react-native-vector-icons/Ionicons'
 import { recipeService } from "../../services/recipeService";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchRecipe } from "../../redux/action/actionRecipe";
+import { RootReducerState } from "../../redux/store";
 
 export function SearchBox({searchItem,setSearchItem}:any){
     const {GET_SERACH_RECIPE} = recipeService()
+    const token = useSelector((state:RootReducerState)=>state.login.userToken)
     const interpolateAnim = useRef(new Animated.Value(0)).current
     const [text,setText] = useState('')
     const [isExpanded,setIsExpanded] = useState(false)
@@ -29,15 +31,13 @@ export function SearchBox({searchItem,setSearchItem}:any){
     const focusOutSearch = () =>{
         onPressSearchButton()
         const data = {
-            start:0,
-            end:5,
-            rcpNm:text
+            keywords:[text]
         }
-        console.log(data,'@@@@@@@@@@@@@')
+        console.log('??????',token)
         if(text!=''){
-            GET_SERACH_RECIPE(data).then((res:any)=>{
+            GET_SERACH_RECIPE({data,token}).then((res:any)=>{
                 console.log('res===========',res)
-                setSearchItem(res)
+                setSearchItem(res.data)
             })
             
         }
@@ -52,7 +52,7 @@ export function SearchBox({searchItem,setSearchItem}:any){
             })}}>
             {/* 검색창 애니메이션 뷰 */}
             <View style={{
-                backgroundColor:Colors.SEPARATED_LINE,
+                backgroundColor:Colors.BACKGROUND_WHITE_DOWN,
                 height:40,
                 paddingHorizontal:10,
                 alignItems:"center",
@@ -64,7 +64,9 @@ export function SearchBox({searchItem,setSearchItem}:any){
                 <TextInput
                     style={{
                         flex:1,
-                        paddingHorizontal:10}}
+                        paddingHorizontal:10,
+                        backgroundColor:Colors.BACKGROUND_WHITE_DOWN
+                    }}
                     value={text}
                     onFocus={onPressSearchButton}
                     onChangeText={(value)=>{setText(value)}}

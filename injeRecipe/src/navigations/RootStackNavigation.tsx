@@ -6,6 +6,7 @@ import HomeStackNavigator from "./HomeNavigator"
 import RefrigatorNavigator from "./RefrigatorNavigator"
 import { RecipeView } from "../feature/recipe/RecipeView"
 import { EditScreen } from "../screens/edit/EditScreen"
+import EditNavigator from "./EditNavigator"
 
 const Stack = createNativeStackNavigator()
 export default function RootStackNavigation () {
@@ -20,7 +21,8 @@ export default function RootStackNavigation () {
             <Stack.Screen name="Bottom" component={BottomNavigator}/>
             <Stack.Screen name="RefrigatorStack" component={RefrigatorNavigator}/>
             <Stack.Screen name="RecipeView" component={RecipeView}/>
-            <Stack.Screen name="EditView" component={EditScreen}/>
+            <Stack.Screen name="EditStack" component={EditNavigator}/>
+            
         </Stack.Navigator>
     )
 }

@@ -4,30 +4,44 @@ import { Colors } from "../../color/Colors";
 import { useNavigation } from "@react-navigation/core";
 import { chatGptService } from "../../services/chatGptService";
 import { recipeService } from "../../services/recipeService";
+import { useSelector } from "react-redux";
+import { RootReducerState } from "../../redux/store";
 
 
 export function RefrigatorAiButton({postData}:any){
     console.log('button',postData)
     const navigation = useNavigation<any>();  
     const {GET_REFIGATOR_RECOMMEND} = chatGptService()
-    const {GET_SERACH_RECIPE} = recipeService()
-    const [text,setText] = useState('')  
+    const {GET_SERACH_RECIPE,POST_IMAGE_SEARCH} = recipeService()
+    const [text,setText] = useState('')
+      
+    const token = useSelector((state:RootReducerState)=> state.login.userToken)
     const onPressRecommendButton = () => {
-        GET_REFIGATOR_RECOMMEND(postData).then((res:string)=>{
+        console.log(token)
+        GET_REFIGATOR_RECOMMEND({
+            data:postData,
+            token:token}).then((res:string)=>{
                 setText(res)
-                console.log(res)    
+                console.log("@@@@",res,"@@@")    
                     const postRecipeData = {
-                        start:0,
-                        end:1,
-                        rcpNm:res
-                    }      
-                    GET_SERACH_RECIPE(postRecipeData).then((item)=>{
+                        keywords:[res.replace(/ /g, '')]
+                    }     
+                    
+                    console.log(postRecipeData) 
+                    GET_SERACH_RECIPE({
+                        data:postRecipeData,
+                        token:token}).then((item:any)=>{
+                            
+                            if(item.data[0].recipe_eng == null){
+                                
+                                const isNull = true
+                                navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:item.data,isNull:isNull,isArray:true}})
+                            }else{
+                                const isNull = false
+                                navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:item.data,isNull:isNull,isArray:true}})
+                            }
                         
-                        const props =item.COOKRCP01.row[0]
-                        
-                        navigation.navigate('RefrigatorStack',{screen:'AiRecommend',params:{item:props}})
                     })
-                
             }) 
     }
     return(

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 import { RefrigatorHeader } from "./RefrigatorHeader";
 import { RefrigatorAiButton } from "./RefrigatorAiButton";
@@ -14,13 +14,15 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useRefrigator } from "../../hooks/useRefrigator";
 import { AddItemView } from "./AddItemView";
 import { Colors } from "../../color/Colors";
+import { refrigatorItem } from "../../data/refrigatorItem";
   
 export function RefrigatorView(){
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => ['10%', '90%'], []);
     const [isExpanded,setIsExpanded] = useState(true)
-    const {foods} =useRefrigator()
+    const {data} =refrigatorItem()
     const [postData,setPostData] = useState([''])
+    const {selectedIndex} = useRefrigator()
     // variables
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
@@ -33,6 +35,7 @@ export function RefrigatorView(){
         console.log(isExpanded)
         setIsExpanded(!isExpanded)
     };
+   
     const BackDropView = () => {
         return(
             <SafeAreaView style={{flex:1}}>
@@ -72,6 +75,7 @@ export function RefrigatorView(){
     }
     const ListFooterComponent = () => {
         return(
+            <>
             <View style={{
                 width:'80%',
                 position:'absolute',
@@ -93,6 +97,7 @@ export function RefrigatorView(){
                     </Text>
                 </Pressable>
             </View>
+            </>
         )
     }
     return(
@@ -106,10 +111,20 @@ export function RefrigatorView(){
                 backdropComponent={BackDropView}
                 backgroundStyle={{backgroundColor:"white"}}>
                     <BottomSheetFlatList
-                        data={foods}
+                        data={data}
                         keyExtractor={(item)=>item.ingredient.title}
-                        renderItem={({item,index})=>{return(<AddItemView item={item}index={index} postData={postData} setPostData={setPostData}/>)}}
-                        ListHeaderComponent={ListHeaderComponent}/>
+                        renderItem={({item,index})=>{
+                            console.log(item.ingredient)
+                            return(
+                        <AddItemView 
+                            selectedIndex={selectedIndex}
+                            item={item}
+                            index={index}
+                            postData={postData}
+                            setPostData={setPostData}
+                            
+                            />)}}
+                            ListHeaderComponent={ListHeaderComponent}/>
                    <ListFooterComponent/>
                 </BottomSheet>
         </BottomSheetModalProvider>

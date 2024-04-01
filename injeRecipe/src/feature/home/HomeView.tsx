@@ -1,25 +1,24 @@
 import LottieView from "lottie-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Margin } from "../../component/Margin";
 import { SignUpButton } from "./SignUpButton";
 import { LoginAimButton } from "./LoginAimButton";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSignIn } from "../../hooks/useSignIn";
-import { setLoginedUser, setUserWeather, setWeatherRecipe, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
+import { setKeywordRecipe, setLoginedUser, setUserToken, setUserUploadBoard, setUserWeather, setWeatherRecipe, setWeatherRecommendMenu } from "../../redux/action/actionLogin";
 import Geolocation from "@react-native-community/geolocation";
 import { weatherService } from "../../services/weatherService";
-import { useWeather } from "../../hooks/useWeather";
 import { chatGptService } from "../../services/chatGptService";
 import { recipeService } from "../../services/recipeService";
-import { sampleData } from "../../data/sampleData";
+import { signService } from "../../services/signService";
+import { RootReducerState } from "../../redux/store";
+import { LoadingIndicaotrView } from "../../component/LoadingIndicatorView";
 
 export function HomeView() {
     // hooks
     const navigation = useNavigation<any>()
-    const {item} = sampleData()
-    console.log('item==============',item)
     const dispatch = useDispatch()
     const {
         isSignedIn,
@@ -28,17 +27,19 @@ export function HomeView() {
     } = useSignIn()
     // api
     const {POST_WEATHER} = weatherService()
-    const {GET_RECIPE_WEHATER} = chatGptService()
-    const {GET_RECIPE} = recipeService()
+    const {GET_RECIPE_WEHATER,GET_KEYWORD_RECIPE} = chatGptService()
+    const {GET_SERACH_RECIPES,POST_USER_UPLOAD_RECIPE} = recipeService()
+    const {POST_SIGNIN} = signService()
     // state
     const [LoginIsExpanded, setLoginIsExpanded] = useState(false)
-    const [weather, setWeather] = useState<any>()
+    const [weather, setWeather] = useState<any>('')
     const [isSignedInGoogle, setIsSignedInGoogle] = useState<boolean>()
     const [getCurrentData,setGetCurrentData] = useState<boolean>()
-    const [first,setFirst] = useState(0)
+    const [loading, setLoading] = useState(false);
+    const token = useSelector((state:RootReducerState)=>state.login.userToken)
     const getIsSignedIn = async () => {
         const result = await isSignedIn()
-        
+        console.log(result)
         setIsSignedInGoogle(result)
     }
 
@@ -46,7 +47,16 @@ export function HomeView() {
         const data = await getCurrentUser()
         
         if(data ==null) setGetCurrentData(false)
-        else {setGetCurrentData(true)
+        else {
+    
+            setGetCurrentData(true)
+            POST_SIGNIN({
+                 id:data.user.email,
+                 pw:'test1234'}).then((res:any)=>{
+                    console.log('@@@@@@@@@@@@@@@@',res)
+                    dispatch(setUserToken(res.token))
+                    
+                 })
             dispatch(setLoginedUser(data))}
  
     }
@@ -54,58 +64,99 @@ export function HomeView() {
         Geolocation.getCurrentPosition(data => {
            const postData= {
             lat:data.coords.latitude+"",
-            lon:data.coords.longitude+""
+            lon:data.coords.longitude+"",
+            token:token
         }
         
         POST_WEATHER(postData).then((res)=>{
-            console.log('POSTWEATHER',res.weather[0].main)
             setWeather(res.weather[0].main) 
-            console.log('------------',res.weather[0].main) 
             // gpt asked need 
-            dispatch(setUserWeather(weather))
+            dispatch(setUserWeather(res.weather[0].main))
+            // 날씨에 맞는 레시피까지 받아옴
+            setTimeout(()=>{
+                getRecipeApi(res.weather[0].main)
+            },500)
             
+            
+                
         })
-        dispatch(setWeatherRecipe(item))
-        setTimeout(()=>{
-            
-            navigation.navigate('Bottom')
-        },2000)
        })   
       
    }
-   const getRecipeApi = async() => {
-     GET_RECIPE_WEHATER(weather).then((res)=>{
-        //날씨에 따른 레시피 리턴
-        const data = [0,0,0,0,0,0,0,0]
-        dispatch(setWeatherRecommendMenu(res))
-        data.map((item,index)=>{
-            const data = {
-                start:0,
-                end:1,
-                rcpNm:res.menu[index]
-            }
-            setTimeout(() => {
-                GET_RECIPE(data);
-            }, index * 800);  
+   const getRecipeApi = async(weathers:any) => {
+     GET_RECIPE_WEHATER(
+        weather,
+        token).then((res:any)=>{
+            console.log(typeof res.menu[0])
+            const postData = {
+                keywords:[
+                res.menu[0],
+                res.menu[1],
+                res.menu[2],
+                res.menu[3],
+                res.menu[4],
+                res.menu[5],
+                res.menu[6],
+                res.menu[7],
+            ]}
+        GET_SERACH_RECIPES(
+            {  data:postData,
+                token:token}).then((result)=>{
+               
+               dispatch(setWeatherRecipe(result.data))
+           })
+    })   
+}
+const keywordRecipe = () => {
+    GET_KEYWORD_RECIPE(token).then((keywordRes)=>{
+    const postData = {
+      keywords:  [
+        keywordRes.kr.menu[0],
+        keywordRes.kr.menu[1],
+        keywordRes.kr.menu[2],
+        keywordRes.kr.menu[3],
+        keywordRes.kr.menu[4],
+        keywordRes.kr.menu[5],
+        keywordRes.kr.menu[6],
+        keywordRes.kr.menu[7],
+    ]}
+    console.log('GET_KEYWORD_RECIPE()',postData)
+    GET_SERACH_RECIPES({
+        data:postData,
+        token:token}).then((res)=>{
+        dispatch(setKeywordRecipe({
+            data:keywordRes,
+            kr:res.data}))
+        setLoading(false);
+        navigation.navigate('Bottom')
         })
+})
+}
+const userUploadRecipe = () => {
+    POST_USER_UPLOAD_RECIPE(token).then((res:any)=>{
+        dispatch(setUserUploadBoard(res.data))
     })
-    setTimeout(()=>{navigation.navigate('Bottom')},1000)
-   
-   }
-  
+}
     useEffect(() => {
         googleSigninConfigure()
         getIsSignedIn()
+    },[])
+    useEffect(()=>{
         if (isSignedInGoogle) {
             getCurrentGoogleUser()
-            if(getCurrentData){
-                getNowLocation()
-                // getRecipeApi()
-                // 시간 너무 오래 걸리고 요청 횟수 제한으로 고정값으로 수정하여 발표 진행
-                // 가라 코드      
-            }
         }
-    })
+    },[isSignedInGoogle])
+   
+    useEffect(()=>{
+        if(getCurrentData!=null && token!=null){
+            setLoading(true)
+            userUploadRecipe()
+            keywordRecipe()
+            
+            getNowLocation()    
+        }
+       
+    },[token])
 
     const styles = StyleSheet.create({
         container: {
@@ -155,10 +206,7 @@ export function HomeView() {
                     style={{ width: "100%", height: "90%", marginTop: -50 }}
                     autoPlay
                     loop />
-                <Pressable onPress={onPressLogin}
-                    style={{ borderWidth: 1, alignItems: "center" }}>
-                    <Text style={{ fontSize: 18 }}>화면전환용 로그인</Text>
-                </Pressable>
+               
             </View>
             <View style={styles.buttonSection}>
                 {/* button section */}
@@ -166,9 +214,14 @@ export function HomeView() {
                 <SignUpButton LoginIsExpanded={LoginIsExpanded} />
                 <Margin height={10} />
                 <LoginAimButton
+                userUploadRecipe={userUploadRecipe}
+                keywordRecipe={keywordRecipe}
+                
+                getNowLocation={getNowLocation}  
                     LoginIsExpanded={LoginIsExpanded}
                     setLoginIsExpanded={setLoginIsExpanded} />
             </View>
+            {loading?<LoadingIndicaotrView text="레시피 제작중"/>:null}
         </SafeAreaView>
     )
 

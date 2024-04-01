@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { useRefrigator } from "../../hooks/useRefrigator";
 import { useDimention } from "../../hooks/useDimension";
+import { refrigatorItem } from "../../data/refrigatorItem";
 
 export function RefrigatorItemView ({postData}:any){
     
-    const {foods2} = useRefrigator()
+    const {data} = refrigatorItem()
     const {getHeight} = useDimention()
     const [renderData,setRenderData] = useState<Array<any>>([])
     console.log("????",renderData)
     useEffect(()=>{
         renderData.length = 0
-        foods2.map(({ingredient, index}:any)=>{
+        data.map(({ingredient, index}:any)=>{
             ingredient.items.map(({value}:any,indexItem:any)=>{
                 postData.map((item:any,index:any)=>{
                     if(value == item){
@@ -21,7 +22,7 @@ export function RefrigatorItemView ({postData}:any){
                 })
             })
         })
-    })
+    },[])
     
     return(
         <View style={{flex:1}}>

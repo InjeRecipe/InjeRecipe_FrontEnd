@@ -5,14 +5,15 @@ import { WeahterView,} from "./WeatherView";
 import { weatherService } from "../../../services/weatherService";
 import Geolocation from "@react-native-community/geolocation";
 import { chatGptService } from "../../../services/chatGptService";
+import { useSelector } from "react-redux";
+import { RootReducerState } from "../../../redux/store";
 
 const hegiht = Dimensions.get('window').height
 export function WeatherCard({ height }: any) {
     const {POST_WEATHER} = weatherService()
-    const {GET_RECIPE_WEHATER} =chatGptService()
     const [location,setLocation] = useState<any>()
     const [weather, setWeather] = useState<any>()
-
+    const token = useSelector((state:RootReducerState)=>state.login.userToken)
     const getNowLocation = ()=> {
         Geolocation.getCurrentPosition(data => {
             setLocation(data)
@@ -25,10 +26,11 @@ export function WeatherCard({ height }: any) {
    useMemo(()=>{
     console.log('Memo',location)
     if(location){
-        type data ={lat:string,lon:string}
+        type data ={lat:string,lon:string,token:string}
          const postData:data = {
             lat:location.coords.latitude+"",
-            lon:location.coords.longitude+""
+            lon:location.coords.longitude+"",
+            token:token
         }
         console.log(typeof postData.lat)
         console.log(typeof postData.lon)
